@@ -1,0 +1,15 @@
+# 3rd-party modules & libraries
+Packages/
+
+# Project place file
+/roact-test.rbxlx
+
+# Roblox Studio lock files
+*.rbxlx.lock
+*.rbxl.lock
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
