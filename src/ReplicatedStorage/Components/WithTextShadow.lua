@@ -1,7 +1,7 @@
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Roact = require(ReplicatedStorage.Packages.roact)
 
--- TODO Constants & Configs
+-- Constants & Configs
 local ZIndexDiff = -1
 
 local function WithShadowWrapper(WrappedTextComponent: Roact.Component | string)

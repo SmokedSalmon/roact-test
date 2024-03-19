@@ -5,9 +5,14 @@ registry = "test"
 [[package]]
 name = "jerry/roact-test"
 version = "0.1.0"
-dependencies = [["roact", "roblox/roact@1.4.4"]]
+dependencies = [["TableUtil", "sleitnick/table-util@1.2.1"], ["roact", "roblox/roact@1.4.4"]]
 
 [[package]]
 name = "roblox/roact"
 version = "1.4.4"
+dependencies = []
+
+[[package]]
+name = "sleitnick/table-util"
+version = "1.2.1"
 dependencies = []

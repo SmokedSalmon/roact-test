@@ -3,7 +3,8 @@ local Roact = require(ReplicatedStorage.Packages.roact)
 
 local WithTextShadow = require(ReplicatedStorage.Components.WithTextShadow)
 
--- TODO Constants & Configs
+-- Constants & Configs
+-- TODO centralize zIndex settings
 local ZIs = {
     bg = -10,
     modal = 0,
@@ -40,23 +41,26 @@ function Modal:init()
 end
 
 function Modal:render()
-    -- local children = self.props[Roact.Children]
+    local _props = table.clone(self.props or {})
+    _props.AnchorPoint = Vector2.new(0.5, 0.5)
+    _props.Name = _props.Name or 'TestModal'
+    _props.Position = UDim2.new(0.5, 0, 0.5, 0)
+    _props.Size = UDim2.new(0.5, 0, 0.6, 0)
+    _props.Rotation = 0
+    _props.ZIndex = ZIs.modal
+    
+    -- local children = _props[Roact.Children]
     -- if children.Title then
     --     warn(`You passed a 'Title' Modal's props, it will be replaced by Modal's Internal Title component. You can change props.Title to avoid this`)
     -- end
-    -- children.Title = createModalTitle({ title = self.props.title })
+    -- children.Title = createModalTitle({ title = _props.title })
 
-    local children = table.clone(self.props[Roact.Children] or {})
-    local title = createModalTitle({ title = self.props.title })
+    local children = table.clone(_props[Roact.Children] or {})
+    local title = createModalTitle({ title = _props.title })
+    _props.title = nil
     table.insert(children, title)
-    return Roact.createElement('Frame', {
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        Name = 'TestModal',
-        Position = UDim2.new(0.5, 0, 0.5, 0),
-        Size = UDim2.new(0.5, 0, 0.6, 0),
-        Rotation = 0,
-        ZIndex = ZIs.modal,
-    }, children)
+    _props[Roact.Children] = children
+    return Roact.createElement('Frame', _props)
 end
 
 return Modal

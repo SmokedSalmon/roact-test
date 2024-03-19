@@ -13,16 +13,44 @@ local Roact = require(ReplicatedStorage.Packages.roact)
 -- Roact.mount(app, Players.LocalPlayer.PlayerGui)
 -- print("Client finished")
 
-local Modal = require(ReplicatedStorage.Components.Modal)
-local WithBoxShadow = require(ReplicatedStorage.Components.WithBoxShadow)
+local Components = ReplicatedStorage.Components
+local AtomicComponents = Components.Atomic
+local Modal = require(Components.Modal)
+local WithCustomBackground = require(Components.WithCustomBackground)
+local GridContainer = require(AtomicComponents.GridContainer)
+local Card = require(Components.Card)
+local Button = require(Components.Button)
+
 local GuiRoot = Roact.createElement('ScreenGui', {}, {
-    TestModel = Roact.createElement(WithBoxShadow(Modal), {
-        title = 'Arsenal'
+    TestModel = Roact.createElement(WithCustomBackground(Modal), {
+        title = 'Arsenal',
+        bg = {
+            BackgroundColor3 = Color3.fromRGB(118, 214, 255),
+            shadow = { BackgroundColor3 = Color3.fromRGB(0, 84, 147) },
+        },
+    }, {
+        CardsContainerTest = Roact.createElement(GridContainer, {
+            isScrollable = true,
+            BackgroundTransparency = 1,
+        }, {
+            Roact.createElement(Card, { Name = 'CardTest'}),
+            Roact.createElement(Button, {
+                Name = 'ButtonTest',
+                padding = { PaddingLeft = UDim.new(0, 20) },
+                textButton = { Text = 'Click Me' },
+            }),
+            Roact.createElement(Card, { Name = 'CardTest'}),
+            Roact.createElement(Card, { Name = 'CardTest'}),
+            Roact.createElement(Card, { Name = 'CardTest'}),
+            Roact.createElement(Card, { Name = 'CardTest'}),
+            Roact.createElement(Card, { Name = 'CardTest'}),
+            Roact.createElement(Card, { Name = 'CardTest'}),
+        }),
     })
 })
 
 local guiUnmountHandler = Roact.mount(GuiRoot, Players.LocalPlayer.PlayerGui, 'Test GUI')
 
-wait(100)
+task.wait(100)
 print('Unmounting GUI')
 Roact.unmount(guiUnmountHandler)

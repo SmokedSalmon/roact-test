@@ -6,3 +6,5 @@ realm = "shared"
 
 [dependencies]
 roact = "roblox/roact@1.4.4"
+# Utilities
+TableUtil = "sleitnick/table-util@1.2.1"
