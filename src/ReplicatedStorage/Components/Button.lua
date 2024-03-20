@@ -9,21 +9,25 @@ local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
 -- Constants & Configs
 local DefaultUIPadding = {
     PaddingLeft = UDim.new(0, 10),
-    PaddingTop = UDim.new(0, 0),
+    PaddingTop = UDim.new(0, 10),
     PaddingRight = UDim.new(0, 10),
-    PaddingBottom = UDim.new(0, 0),
+    PaddingBottom = UDim.new(0, 10),
+}
+local DefaultRootContainerProps = {
+    -- [TODO] make this a Container Root Component
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    AutomaticSize = Enum.AutomaticSize.XY, -- Default fit to content
 }
 local DefaultTextButtonProps = {
-    Size = UDim2.new(1, 0, 1, 0)
+    Size = UDim2.new(1, 0, 1, 0),
+    AutomaticSize = Enum.AutomaticSize.XY, -- Default fit to content
 }
 
 local Button = Roact.Component:extend('Button')
 
 function Button:render()
-    local _props = TableUtil.Assign({
-        Name = 'Button',
-    }, self.props)
-    _props.Name = nil
+    local _props = TableUtil.Assign(DefaultRootContainerProps, self.props or {})
     local _paddingProps = TableUtil.Assign(DefaultUIPadding, _props.padding or {})
     _props.padding = nil
     
@@ -31,8 +35,9 @@ function Button:render()
     _props.textButton = nil
 
     _props[Roact.Children] = TableUtil.Assign({
-        UIPadding = Roact.createElement('UIPadding', _paddingProps),
-        TextButton = Roact.createElement('TextButton', _textButtonProps),
+        TextButton = Roact.createElement('TextButton', _textButtonProps, {
+            UIPadding = Roact.createElement('UIPadding', _paddingProps),
+        }),
     }, _props[Roact.Children])
     
     return Roact.createElement('Frame', _props)

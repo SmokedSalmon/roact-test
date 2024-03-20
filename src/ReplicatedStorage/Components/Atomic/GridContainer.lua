@@ -1,26 +1,32 @@
 --[[
     Grid Container Component that arrange items in rows and columns which is similar to the CSS Flex-box layout
+    [TODO] How to set row count & column count? use CellSize
 ]]
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Roact = require(ReplicatedStorage.Packages.roact)
+local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
 
 -- Constants & Configs
 local DefaultScrollingDirection = Enum.ScrollingDirection.Y
 local DefaultAutomaticCanvasSize = Enum.AutomaticSize.Y
 local DefaultPosition = UDim2.new(0, 0, 0, 0)
 local DefaultSize = UDim2.new(1, 0, 1, 0)
+local DefaultSort = Enum.SortOrder.LayoutOrder
 local DefaultRowCount = 3
 local DefaultColumnCount = 3
 
 local GridContainer = Roact.Component:extend('GridContainer')
 
 function GridContainer:render()
-    local _props = self.props or {}
-    local isScrollable = _props.isScrollable or false
+    local _props = TableUtil.Assign({
+        isScrollable = false,
+        Position = DefaultPosition,
+        Size = DefaultSize,
+        grid = {},
+    }, self.props or {})
+    local isScrollable = _props.isScrollable
     _props.isScrollable = nil
-    _props.Position = _props.Position or DefaultPosition
-    _props.Size = _props.Size or DefaultSize
-    local _gridProps = _props.grid or {}
+    local _gridProps = TableUtil.Assign({ SortOrder = DefaultSort }, _props.grid)
     _props.grid = nil
 
     -- [TODO] check conflict with potential UILayout Component under the this container Component
@@ -36,8 +42,10 @@ function GridContainer:render()
     _props[Roact.Children].UIGridLayout = Roact.createElement('UIGridLayout', _gridProps)
 
     if isScrollable then
-        _props.ScrollingDirection = _props.ScrollingDirection or DefaultScrollingDirection
-        _props.AutomaticCanvasSize = _props.AutomaticCanvasSize or DefaultAutomaticCanvasSize
+        _props = TableUtil.Assign({
+            ScrollingDirection = DefaultScrollingDirection,
+            AutomaticCanvasSize = DefaultAutomaticCanvasSize,
+        }, _props)
         if _props.AutomaticCanvasSize ~= Enum.AutomaticSize.None then
             _props.CanvasSize = UDim2.new(0, 0, 0, 0) -- make sure no scrolling when it is NOT necessary
         end
