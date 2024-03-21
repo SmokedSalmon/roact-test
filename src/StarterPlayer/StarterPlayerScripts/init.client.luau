@@ -15,6 +15,7 @@ local Roact = require(ReplicatedStorage.Packages.roact)
 
 local Components = ReplicatedStorage.Components
 local AtomicComponents = Components.Atomic
+local Store = require(ReplicatedStorage.Store)
 local Modal = require(Components.Modal)
 local WithCustomBackground = require(AtomicComponents.WithCustomBackground)
 local GridContainer = require(AtomicComponents.GridContainer)
@@ -26,41 +27,53 @@ local UIModules = require(ReplicatedStorage.UIModules)
 local GuiRoot = Roact.createElement('ScreenGui', {
     IgnoreGuiInset = true,
 }, {
-    -- TestModel = Roact.createElement(WithCustomBackground(Modal), {
-    --     title = 'Arsenal',
-    --     bg = {
-    --         BackgroundColor3 = Color3.fromRGB(118, 214, 255),
-    --         shadow = { BackgroundColor3 = Color3.fromRGB(0, 84, 147) },
-    --     },
-    -- }, {
-    --     CardsContainerTest = Roact.createElement(GridContainer, {
-    --         isScrollable = true,
-    --         BackgroundTransparency = 1,
-    --     }, {
-    --         Card1 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 1 }),
-    --         ButtonTest = Roact.createElement(Button, {
-    --             padding = { PaddingLeft = UDim.new(0, 20) },
-    --             textButton = {
-    --                 Text = 'Click Me', TextSize = 16, FontFace = Font.new('rbxasset://fonts/families/JosefinSans.json', Enum.FontWeight.Bold),
-    --                 [Roact.Event.MouseButton1Click] = function(pass) print(pass) end,
-    --             },
-    --             LayoutOrder = 2,
-    --         }),
-    --         Card2 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 3}),
-    --         Card3 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 4}),
-    --         Card4 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 5}),
-    --         Card5 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 6}),
-    --         Card6 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 7}),
-    --         Card7 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 8}),
-    --     })
-    -- }),
+    -- TestModel = UIModules.createModalDummy(),
+    TestModel = UIModules.createStateModalDummy(),
     HListContainerTest = UIModules.createHListContainerDummy(),
     VListContainerTest = UIModules.createVListContainerDummy(),
     -- BoxTest = UIModules.createBoxDummy(),
-    ButtonBaseTest = UIModules.createButtonBaseDummy(),
+    -- ButtonBaseTest = UIModules.createButtonBaseDummy(),
 })
 
-local guiUnmountHandler = Roact.mount(GuiRoot, Players.LocalPlayer.PlayerGui, 'Test GUI')
+local GlobalStoreProvider = Roact.Component:extend('GlobalStore')
+function GlobalStoreProvider:init()
+    self:setState({
+        Scope1 = {
+            shadowColor = Color3.fromRGB(0, 0, 0)
+        },
+        Scope2 = {},
+    })
+    coroutine.wrap(function()
+        task.wait(2)
+        print('Shadow color changed')
+        self:setState({
+            Scope1 = {
+                shadowColor = Color3.fromRGB(0, 84, 147)
+            },
+            Scope2 = {},
+        })
+    end)()
+end
+function GlobalStoreProvider:render()
+    return Roact.createElement(Store.Provider, {
+        value = self.state
+    }, self.props[Roact.Children])
+end
+local GuiRootWithStore = Roact.createElement('ScreenGui', {
+    IgnoreGuiInset = true,
+}, {
+    GlobalStoreProvider = Roact.createElement(GlobalStoreProvider, {}, {
+        -- TestModel = UIModules.createModalDummy(),
+        TestModel = UIModules.createStateAndContextualModalDummy(),
+        HListContainerTest = UIModules.createHListContainerDummy(),
+        VListContainerTest = UIModules.createVListContainerDummy(),
+        -- BoxTest = UIModules.createBoxDummy(),
+        -- ButtonBaseTest = UIModules.createButtonBaseDummy(),
+    })
+})
+
+-- local guiUnmountHandler = Roact.mount(GuiRoot, Players.LocalPlayer.PlayerGui, 'Test GUI')
+local guiUnmountHandler = Roact.mount(GuiRootWithStore, Players.LocalPlayer.PlayerGui, 'Test GUI')
 
 task.wait(1000)
 print('Unmounting GUI')
