@@ -56,42 +56,8 @@ local GuiRoot = Roact.createElement('ScreenGui', {
     -- }),
     HListContainerTest = UIModules.createHListContainerDummy(),
     VListContainerTest = UIModules.createVListContainerDummy(),
-    BoxTest = Roact.createElement(Box, {
-        AnchorPoint = Vector2.new(.5, .5),
-        Position = UDim2.new(.5, 0, .5, 0),
-        Size = UDim2.new(.5, 0, .6, 0),
-        BackgroundColor3 = Color3.fromRGB(118, 214, 255),
-        BackgroundTransparency = 0.8,
-        backgroundCorner = UDim.new(0, 60),
-        
-        -- Corner
-        -- CornerRadius = UDim.new(0, 20),
-        
-        -- Shadow
-        -- shadowBackgroundColor3 = Color3.fromRGB(0, 84, 147),
-        shadowTransparency = .5,
-        shadowOffset = UDim2.new(0, 5, 0, 10),
-        shadowCorner = UDim.new(0, 5),
-        -- forceRenderShadowFrame = true,
-
-        -- Border
-        BorderColor3 = Color3.fromRGB(255, 0, 0),
-        -- borderOffset = UDim2.new(0, -3, 0, -10),
-        borderThickness = 3,
-        borderTransparency = 0.8,
-        -- borderCorner = UDim.new(0, 60),
-        -- borderLineJoinMode = Enum.LineJoinMode.Round,
-        -- borderApplyStrokeMode = Enum.ApplyStrokeMode.Contextual,
-        -- forceRenderBorderFrame = true,
-
-        -- Padding
-        Padding = {
-            PaddingLeft = UDim.new(0, 10),
-            PaddingTop = UDim.new(0, 20),
-            -- PaddingRight = UDim.new(0, 10),
-            -- PaddingBottom = UDim.new(0, 10),
-        },
-    })
+    -- BoxTest = UIModules.createBoxDummy(),
+    ButtonBaseTest = UIModules.createButtonBaseDummy(),
 })
 
 local guiUnmountHandler = Roact.mount(GuiRoot, Players.LocalPlayer.PlayerGui, 'Test GUI')

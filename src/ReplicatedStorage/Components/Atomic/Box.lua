@@ -61,13 +61,6 @@ local DefaultBorderStrokeProps = {
     Thickness = 0,
     Transparency = 0, -- Not setting this default value means it follows __BG Frame's
 }
--- Not used, but keep it in case future requires
-local DefaultPadding = {
-    PaddingLeft = UDim.new(0, 10),
-    PaddingTop = UDim.new(0, 10),
-    PaddingRight = UDim.new(0, 10),
-    PaddingBottom = UDim.new(0, 10),
-}
 
 local Box = Roact.Component:extend('Box')
 
@@ -93,9 +86,14 @@ function Box:render()
     })
     -- Border
     local _borderFrameProps = TableUtil.Assign(DefaultBorderFrameProps, {
-        Position = _bgProps.Position + (_props.borderOffset or UDim2.new(0, 0, 0, 0)),
+        Position = _bgProps.Position,
         Size = _bgProps.Size,
     })
+    if _props.borderSize then
+        -- -1 scale because this is relative to Background
+        _borderFrameProps.Size += (_props.borderSize - UDim2.new(1, 0, 1, 0))
+    end
+    if _props.borderOffset then _borderFrameProps.Position += _props.borderOffset end
     local _borderStrokeProps = TableUtil.Assign(DefaultBorderStrokeProps, {
         Color = _props.BorderColor3,
         Thickness = _props.borderThickness or _props.BorderSizePixel,
@@ -111,6 +109,7 @@ function Box:render()
             or _bgCornerRadius
             or _borderCornerRadius
             -- Other properties that requires to use UIStroke to render border
+            or _props.borderSize
             or _props.borderOffset
             or _props.borderLineJoinMode
             or _props.borderApplyStrokeMode
@@ -123,11 +122,15 @@ function Box:render()
         BackgroundColor3 = _props.shadowBackgroundColor3,
         BackgroundTransparency = _props.shadowTransparency,
     })
-    local _renderShadowElement = _props.forceRenderShadowFrame or _shadowProps.BackgroundTransparency < 1
+    if _props.shadowSize then
+        -- -1 scale because this is relative to Background
+        _shadowProps.Size += (_props.shadowSize - UDim2.new(1, 0, 1, 0))
+    end
+    local _renderShadowElement = _props.enableShadow
     
     -- clear properties to fit actual Roblox Instance
     _props.backgroundCorner = nil
-    _props.forceRenderBGFrame = nil
+    _props.borderSize = nil
     _props.borderOffset = nil
     _props.borderThickness = nil
     _props.borderCorner = nil
@@ -135,11 +138,12 @@ function Box:render()
     _props.borderLineJoinMode = nil
     _props.borderApplyStrokeMode = nil
     _props.forceRenderBorderFrame = nil
+    _props.enableShadow = nil
+    _props.shadowSize = nil
     _props.shadowOffset = nil
     _props.shadowBackgroundColor3 = nil
     _props.shadowCorner = nil
     _props.shadowTransparency = nil
-    _props.forceRenderShadowFrame = nil
     _props.CornerRadius = nil
     _props.Padding = nil
 
