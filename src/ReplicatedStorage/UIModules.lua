@@ -5,7 +5,7 @@ local Roact = require(ReplicatedStorage.Packages.roact)
 
 local Components = ReplicatedStorage.Components
 local AtomicComponents = Components.Atomic
-local Store = require(ReplicatedStorage.Store)
+local StoreService = require(ReplicatedStorage.Store)
 local Modal = require(Components.Modal)
 local WithCustomBackground = require(AtomicComponents.WithCustomBackground)
 local GridContainer = require(AtomicComponents.GridContainer)
@@ -14,8 +14,11 @@ local Button = require(Components.Button)
 local ListContainer = require(AtomicComponents.ListContainer)
 local Box = require(AtomicComponents.Box)
 
+-- persist it, do not create this in render cycle, otherwise it will init() instead of every update
+local ModalWithCB = WithCustomBackground(Modal)
+
 local function createModalDummy()
-    return Roact.createElement(WithCustomBackground(Modal), {
+    return Roact.createElement(ModalWithCB, {
         title = 'Arsenal',
         bg = {
             BackgroundColor3 = Color3.fromRGB(118, 214, 255),
@@ -46,7 +49,7 @@ local function createModalDummy()
 end
 
 -- Test for state update & Context-connected Component
-local StateModal = Roact.Component:extend('StateModal')
+local StateModal = Roact.PureComponent:extend('StateModal')
 
 function StateModal:init()
     self:setState({
@@ -54,7 +57,7 @@ function StateModal:init()
     })
     coroutine.wrap(function()
         task.wait(1)
-        print('color change')
+        -- print('color change')
         self:setState({
             k1 = Color3.fromRGB(255, 0, 0)
         })
@@ -62,7 +65,8 @@ function StateModal:init()
 end
 
 function StateModal:render()
-    return Roact.createElement(WithCustomBackground(Modal), {
+    return Roact.createElement(ModalWithCB, {
+    -- return Roact.createElement(Modal, {
         title = 'Arsenal',
         bg = {
             BackgroundColor3 = self.state.k1,
@@ -97,7 +101,7 @@ local function createStateModalDummy()
 end
 
 local function createStateAndContextualModalDummy()
-    return Roact.createElement(Store.Consumer, {
+    return Roact.createElement(StoreService.GlobalStore.Context.Consumer, {
         render = function(store)
             return Roact.createElement(StateModal, {
                 shadowColor = store.Scope1.shadowColor,

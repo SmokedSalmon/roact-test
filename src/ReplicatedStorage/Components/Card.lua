@@ -16,10 +16,11 @@ local DefaultUIPadding = Roact.createElement('UIPadding', {
     PaddingBottom = UDim.new(0, 10),
 })
 
-local Card = Roact.Component:extend('Card')
+local Card = Roact.PureComponent:extend('Card')
 
 function Card:render()
-    local _props = self.props or {}
+    -- print(`Card render`)
+    local _props = table.clone(self.props or {})
     _props.Name = _props.Name or 'CardRoot'
     -- _props.ClipDescendants = true
     -- Since we have to cater Shadow, background is facilitated with a child frame named BG. Otherwise the Shadow will be over root container's own Background
@@ -33,6 +34,19 @@ function Card:render()
         UIPadding = DefaultUIPadding,
         Border = Roact.createElement(Border, borderProps)
     })
+end
+
+function Card:init()
+    -- print('Card Initiated')
+end
+
+-- function Card:shouldUpdate(np, ns)
+--     print(`Should update: {self.props ~= np}`)
+--     return self.props ~= np or self.state ~= ns
+-- end
+
+function Card:didUpdate()
+    print(`Card updated`)
 end
 
 return Card

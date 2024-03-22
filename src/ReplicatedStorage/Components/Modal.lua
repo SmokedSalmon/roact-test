@@ -34,10 +34,10 @@ local function createModalTitle(props)
 end
 
 -- ===== Modal Component ===== --
-local Modal = Roact.Component:extend('Modal')
+local Modal = Roact.PureComponent:extend('Modal')
 
 function Modal:init()
-    print('Modal has initiated')
+    -- print('Modal has initiated')
 end
 
 function Modal:render()
