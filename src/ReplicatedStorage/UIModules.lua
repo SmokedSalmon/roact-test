@@ -5,7 +5,7 @@ local Roact = require(ReplicatedStorage.Packages.roact)
 
 local Components = ReplicatedStorage.Components
 local AtomicComponents = Components.Atomic
-local StoreService = require(ReplicatedStorage.Store)
+local Store = require(ReplicatedStorage.Store)
 local Modal = require(Components.Modal)
 local WithCustomBackground = require(AtomicComponents.WithCustomBackground)
 local GridContainer = require(AtomicComponents.GridContainer)
@@ -101,7 +101,7 @@ local function createStateModalDummy()
 end
 
 local function createStateAndContextualModalDummy()
-    return Roact.createElement(StoreService.GlobalStore.Context.Consumer, {
+    return Roact.createElement(Store.Global.Context.Consumer, {
         render = function(store)
             return Roact.createElement(StateModal, {
                 shadowColor = store.Scope1.shadowColor,

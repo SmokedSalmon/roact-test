@@ -15,7 +15,7 @@ local Roact = require(ReplicatedStorage.Packages.roact)
 
 local Components = ReplicatedStorage.Components
 local AtomicComponents = Components.Atomic
-local StoreService = require(ReplicatedStorage.Store)
+local Store = require(ReplicatedStorage.Store)
 local Modal = require(Components.Modal)
 local WithCustomBackground = require(AtomicComponents.WithCustomBackground)
 local GridContainer = require(AtomicComponents.GridContainer)
@@ -35,8 +35,8 @@ local GuiRoot = Roact.createElement('ScreenGui', {
     -- ButtonBaseTest = UIModules.createButtonBaseDummy(),
 })
 
-local GlobalStoreProvider = Roact.PureComponent:extend('GlobalStore')
-function GlobalStoreProvider:init()
+local GlobalProvider = Roact.PureComponent:extend('Global')
+function GlobalProvider:init()
     
     self:setState({
         Scope1 = {
@@ -72,13 +72,13 @@ function GlobalStoreProvider:init()
     end)()
 end
 
-function GlobalStoreProvider:render()
-    return Roact.createElement(StoreService.GlobalStore.Context.Provider, {
+function GlobalProvider:render()
+    return Roact.createElement(Store.Global.Context.Provider, {
         value = self.state
     }, self.props[Roact.Children])
 end
 
-local Lv1Consumer = Roact.createElement(StoreService.GlobalStore.Context.Consumer, {
+local Lv1Consumer = Roact.createElement(Store.Global.Context.Consumer, {
     render = function(gs)
         print(`Outer: count1 - {gs.Scope2.count1} | count2 - {gs.Scope2.count2}`)
     end
@@ -111,12 +111,12 @@ function Lv2Provider:init()
     end)()
 end
 function Lv2Provider:render()
-    return Roact.createElement(StoreService.GlobalStore.Context.Provider, {
+    return Roact.createElement(Store.Global.Context.Provider, {
         value = self.state
     }, self.props[Roact.Children])
 end
 
-local Lv2Consumer = Roact.createElement(StoreService.GlobalStore.Context.Consumer, {
+local Lv2Consumer = Roact.createElement(Store.Global.Context.Consumer, {
     render = function(gs)
         print(`Lv2: count1 - {gs.Scope2.count1} | count2 - {gs.Scope2.count2}`)
     end
@@ -126,7 +126,7 @@ local Lv2Consumer = Roact.createElement(StoreService.GlobalStore.Context.Consume
 local GuiRootWithStore = Roact.createElement('ScreenGui', {
     IgnoreGuiInset = true,
 }, {
-    GlobalStoreProvider = Roact.createElement(GlobalStoreProvider, {}, {
+    GlobalProvider = Roact.createElement(GlobalProvider, {}, {
         -- TestModel = UIModules.createModalDummy(),
         TestModel = UIModules.createStateAndContextualModalDummy(),
         HListContainerTest = UIModules.createHListContainerDummy(),
@@ -145,12 +145,12 @@ local GuiRootWithStore = Roact.createElement('ScreenGui', {
 
 -- Test for Store Helpers
 local defaultValue = { Scope1 = { Text = 'Passed Down' } }
-local testGlobalStore = StoreService.createStore(defaultValue, 'gs')
+local testGlobal = Store.create(defaultValue, 'gs')
 
 local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
     IgnoreGuiInset = true,
 }, {
-    Root = testGlobalStore.ProvideFor({
+    Root = testGlobal.ProvideFor({
         -- TestModel = UIModules.createModalDummy(),
         -- TestModel = UIModules.createStateAndContextualModalDummy(),
         -- HListContainerTest = UIModules.createHListContainerDummy(),
@@ -162,7 +162,7 @@ local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
         --     Lv2Consumer,
         -- })
         TestFrame = Roact.createElement('Frame', {}, {
-            testGlobalStore.asConsumer('TextLabel', function(state) return state.Scope1 end)
+            testGlobal.asConsumer('TextLabel', function(state) return state.Scope1 end)
         })
     })
 })

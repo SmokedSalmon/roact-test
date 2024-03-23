@@ -1,5 +1,6 @@
 --[[
     GUI's Global Store using Roact's Context API
+    Also includes the create Store Helper
 ]]
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Roact = require(ReplicatedStorage.Packages.roact)
@@ -9,6 +10,7 @@ type StoreType = {
     asConsumer: (Roact.Component, ((state: any) -> any)?) -> Roact.Component,
 }
 
+-- Create Store Helper function
 local function createStore(defaultValue: any, name: string?): StoreType
     local _context = Roact.createContext(defaultValue)
     local _name = name or 'Store'
@@ -49,9 +51,9 @@ end
 
 local GlobalStore = createStore({}, 'GlobalStore')
 
-local StoreService = {
-    GlobalStore = GlobalStore,
-    createStore = createStore,
+local Store = {
+    Global = GlobalStore,
+    create = createStore,
 }
 
-return StoreService
+return Store
