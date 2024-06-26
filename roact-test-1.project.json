@@ -1,5 +1,5 @@
 {
-  "name": "roact-test",
+  "name": "roact-test-1",
   "tree": {
     "$className": "DataModel",
 
@@ -7,19 +7,22 @@
       "Packages": {
         "$path": "Packages"
       },
-      "$path": "src/ReplicatedStorage",
+      "Shared": {
+        "$path": "src/Shared"
+      },
+      "$path": "src/roact-test-1/ReplicatedStorage",
       "$ignoreUnknownInstances": true
     },
 
     "ServerScriptService": {
-      "$path": "src/ServerScriptService",
+      "$path": "src/roact-test-1/ServerScriptService",
       "$ignoreUnknownInstances": true
     },
 
     "StarterPlayer": {
       "StarterPlayerScripts": {
         "Client": {
-          "$path": "src/StarterPlayer/StarterPlayerScripts",
+          "$path": "src/roact-test-1/StarterPlayer/StarterPlayerScripts",
           "$ignoreUnknownInstances": true
         }
       }

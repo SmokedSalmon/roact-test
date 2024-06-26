@@ -13,7 +13,7 @@ local Roact = require(ReplicatedStorage.Packages.roact)
 -- Roact.mount(app, Players.LocalPlayer.PlayerGui)
 -- print("Client finished")
 
-local Components = ReplicatedStorage.Components
+local Components = ReplicatedStorage.Shared.Components
 local AtomicComponents = Components.Atomic
 local StoreService = require(ReplicatedStorage.Store)
 local Modal = require(Components.Modal)
@@ -37,7 +37,6 @@ local GuiRoot = Roact.createElement('ScreenGui', {
 
 local GlobalStoreProvider = Roact.PureComponent:extend('GlobalStore')
 function GlobalStoreProvider:init()
-    
     self:setState({
         Scope1 = {
             shadowColor = Color3.fromRGB(0, 0, 0)
@@ -141,7 +140,7 @@ local GuiRootWithStore = Roact.createElement('ScreenGui', {
 })
 
 -- local guiUnmountHandler = Roact.mount(GuiRoot, Players.LocalPlayer.PlayerGui, 'Test GUI')
--- local guiUnmountHandler = Roact.mount(GuiRootWithStore, Players.LocalPlayer.PlayerGui, 'Test GUI')
+local guiUnmountHandler = Roact.mount(GuiRootWithStore, Players.LocalPlayer.PlayerGui, 'Test GUI')
 
 -- Test for Store Helpers
 local defaultValue = { Scope1 = { Text = 'Passed Down' } }
@@ -167,7 +166,7 @@ local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
     })
 })
 
-local guiUnmountHandler = Roact.mount(GuiRootWithStoreHelpers, Players.LocalPlayer.PlayerGui, 'Test GUI')
+-- local guiUnmountHandler = Roact.mount(GuiRootWithStoreHelpers, Players.LocalPlayer.PlayerGui, 'Test GUI')
 
 task.wait(1000)
 print('Unmounting GUI')

@@ -4,7 +4,7 @@
 ]]
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Roact = require(ReplicatedStorage.Packages.roact)
-local Components = ReplicatedStorage.Components
+local Components = ReplicatedStorage.Shared.Components
 local AtomicComponents = Components.Atomic
 local Border = require(AtomicComponents.Border)
 

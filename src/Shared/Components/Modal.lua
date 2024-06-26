@@ -1,7 +1,7 @@
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Roact = require(ReplicatedStorage.Packages.roact)
 
-local WithTextShadow = require(ReplicatedStorage.Components.WithTextShadow)
+local WithTextShadow = require(ReplicatedStorage.Shared.Components.WithTextShadow)
 
 -- Constants & Configs
 -- TODO centralize zIndex settings
