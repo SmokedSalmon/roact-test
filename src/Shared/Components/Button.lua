@@ -5,6 +5,7 @@
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Roact = require(ReplicatedStorage.Packages.roact)
 local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
+local Box = require(ReplicatedStorage.Shared.Components.Atomic.Box)
 
 -- Constants & Configs
 local DefaultUIPadding = {
@@ -28,19 +29,16 @@ local Button = Roact.Component:extend('Button')
 
 function Button:render()
     local _props = TableUtil.Assign(DefaultRootContainerProps, self.props or {})
-    local _paddingProps = TableUtil.Assign(DefaultUIPadding, _props.padding or {})
-    _props.padding = nil
     
     local _textButtonProps = TableUtil.Assign(DefaultTextButtonProps, _props.textButton or {})
     _props.textButton = nil
 
     _props[Roact.Children] = TableUtil.Assign({
         TextButton = Roact.createElement('TextButton', _textButtonProps, {
-            UIPadding = Roact.createElement('UIPadding', _paddingProps),
         }),
     }, _props[Roact.Children])
     
-    return Roact.createElement('Frame', _props)
+    return Roact.createElement(Box, _props)
 end
 
 return Button

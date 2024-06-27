@@ -31,8 +31,23 @@ local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
     IgnoreGuiInset = true,
 }, {
     Root = GlobalStore.ProvideFor({
-        TestContainer = Roact.createElement(Box, {}, {
+        TestContainer = Roact.createElement(Box, {
+            Position = UDim2.new(0, 0, 0, 0),
+            Size = UDim2.new(1, 0, 1, 0),
+            Padding = {
+                PaddingLeft = UDim.new(0, 50),
+                PaddingTop = UDim.new(0, 50),
+                PaddingRight = UDim.new(0, 50),
+                PaddingBottom = UDim.new(0, 50),
+            },
+        }, {
             Button1 = Roact.createElement(Button, {
+                Padding = {
+                    PaddingLeft = UDim.new(0, 20),
+                    PaddingTop = UDim.new(0, 20),
+                    PaddingRight = UDim.new(0, 20),
+                    PaddingBottom = UDim.new(0, 20),
+                },
                 textButton = {
                     Text = 'Click Me'
                 }
