@@ -30,15 +30,25 @@ local Button = Roact.Component:extend('Button')
 function Button:render()
     local _props = TableUtil.Assign(DefaultRootContainerProps, self.props or {})
     
-    local _textButtonProps = TableUtil.Assign(DefaultTextButtonProps, _props.textButton or {})
-    _props.textButton = nil
+    local _buttonProps = TableUtil.Assign(DefaultTextButtonProps, _props.Button or {})
+    _props.Button = nil
+
+    if _props.Event and typeof(_props.Event) == 'table' then
+        for event, handler in pairs(_props.Event) do
+            _buttonProps[Roact.Event[event]] = handler
+        end
+        _props.Event = nil
+    end
 
     _props[Roact.Children] = TableUtil.Assign({
-        TextButton = Roact.createElement('TextButton', _textButtonProps, {
-        }),
+        TextButton = Roact.createElement('TextButton', _buttonProps, {}),
     }, _props[Roact.Children])
     
     return Roact.createElement(Box, _props)
+end
+
+function Button:willUnmount()
+    -- if self.__handlers.onActivated then self.__handlers.onActivated:Disconnect() end
 end
 
 return Button

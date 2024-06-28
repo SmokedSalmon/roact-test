@@ -3,7 +3,7 @@ local Players = game:GetService("Players")
 
 local Roact = require(ReplicatedStorage.Packages.roact)
 
-local Components = ReplicatedStorage.Components
+local Components = ReplicatedStorage.Shared.Components
 local AtomicComponents = Components.Atomic
 local StoreService = require(ReplicatedStorage.Store)
 local Modal = require(Components.Modal)
@@ -29,21 +29,21 @@ local function createModalDummy()
             isScrollable = true,
             BackgroundTransparency = 1,
         }, {
-            Card1 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 1 }),
+            -- Card1 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 1 }),
             ButtonTest = Roact.createElement(Button, {
-                padding = { PaddingLeft = UDim.new(0, 20) },
+                Padding = { PaddingLeft = UDim.new(0, 20) },
                 textButton = {
                     Text = 'Click Me', TextSize = 16, FontFace = Font.new('rbxasset://fonts/families/JosefinSans.json', Enum.FontWeight.Bold),
                     [Roact.Event.MouseButton1Click] = function(pass) print(pass) end,
                 },
                 LayoutOrder = 2,
             }),
-            Card2 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 3}),
-            Card3 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 4}),
-            Card4 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 5}),
-            Card5 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 6}),
-            Card6 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 7}),
-            Card7 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 8}),
+            -- Card2 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 3}),
+            -- Card3 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 4}),
+            -- Card4 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 5}),
+            -- Card5 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 6}),
+            -- Card6 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 7}),
+            -- Card7 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 8}),
         })
     })
 end
@@ -79,7 +79,7 @@ function StateModal:render()
         }, {
             Card1 = Roact.createElement(Card, { Name = 'CardTest', LayoutOrder = 1 }),
             ButtonTest = Roact.createElement(Button, {
-                padding = { PaddingLeft = UDim.new(0, 20) },
+                Padding = { PaddingLeft = UDim.new(0, 20) },
                 textButton = {
                     Text = 'Click Me', TextSize = 16, FontFace = Font.new('rbxasset://fonts/families/JosefinSans.json', Enum.FontWeight.Bold),
                     [Roact.Event.MouseButton1Click] = function(pass) print(pass) end,

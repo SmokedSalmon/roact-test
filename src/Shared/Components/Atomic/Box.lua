@@ -76,9 +76,11 @@ function Box:render()
     end
 
     -- Padding
-    local _paddingProps = TableUtil.Assign(DefaultPadding, _props.Padding)
-    _children.Padding = Roact.createElement('UIPadding', _paddingProps)
-    _props.Padding = nil
+    if _props.Padding then
+        local _paddingProps = TableUtil.Assign(DefaultPadding, _props.Padding)
+        _children.Padding = Roact.createElement('UIPadding', _paddingProps)
+        _props.Padding = nil
+    end
 
     -- Background
     local _bgProps = nil

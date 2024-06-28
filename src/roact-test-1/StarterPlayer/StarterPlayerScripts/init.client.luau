@@ -22,7 +22,7 @@ local GridContainer = require(AtomicComponents.GridContainer)
 local Card = require(Components.Card)
 local Button = require(Components.Button)
 local Box = require(AtomicComponents.Box)
-local UIModules = require(ReplicatedStorage.UIModules)
+local UIModules = require(ReplicatedStorage.Shared.UIModules)
 
 local GuiRoot = Roact.createElement('ScreenGui', {
     IgnoreGuiInset = true,
@@ -128,14 +128,14 @@ local GuiRootWithStore = Roact.createElement('ScreenGui', {
     GlobalStoreProvider = Roact.createElement(GlobalStoreProvider, {}, {
         -- TestModel = UIModules.createModalDummy(),
         TestModel = UIModules.createStateAndContextualModalDummy(),
-        HListContainerTest = UIModules.createHListContainerDummy(),
-        VListContainerTest = UIModules.createVListContainerDummy(),
+        -- HListContainerTest = UIModules.createHListContainerDummy(),
+        -- VListContainerTest = UIModules.createVListContainerDummy(),
         -- BoxTest = UIModules.createBoxDummy(),
         -- ButtonBaseTest = UIModules.createButtonBaseDummy(),
-        Lv1Consumer,
-        Roact.createElement(Lv2Provider, {}, {
-            Lv2Consumer,
-        })
+        -- Lv1Consumer,
+        -- Roact.createElement(Lv2Provider, {}, {
+        --     Lv2Consumer,
+        -- })
     })
 })
 

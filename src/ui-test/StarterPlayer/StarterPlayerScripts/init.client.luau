@@ -22,6 +22,14 @@ local GridContainer = require(AtomicComponents.GridContainer)
 local Card = require(Components.Card)
 local Button = require(Components.Button)
 local Box = require(AtomicComponents.Box)
+local TestUIComponents = require(ReplicatedStorage.TestUIComponents)
+
+-- Test for Static Menus
+local GuiRoot = Roact.createElement('ScreenGui', {
+    IgnoreGuiInset = true,
+}, {
+    TestMainMenu = TestUIComponents.TestMainMenu,
+})
 
 -- Test for Store Helpers
 local defaultValue = { Scope1 = { Text = 'Passed Down' } }
@@ -48,15 +56,23 @@ local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
                     PaddingRight = UDim.new(0, 20),
                     PaddingBottom = UDim.new(0, 20),
                 },
-                textButton = {
+                Button = {
                     Text = 'Click Me'
-                }
+                },
+                Event = {
+                    Activated = function() print('Pressed') end,
+                    MouseEnter = function() print('Mouse Entered') end,
+                    MouseLeave = function() print('Mouse Left') end,
+                    TouchPan = function() print('Panned') end,
+                    TouchTap = function() print('Tapped') end,
+                },
             })
         })
     })
 })
 
-local guiUnmountHandler = Roact.mount(GuiRootWithStoreHelpers, Players.LocalPlayer.PlayerGui, 'Test GUI')
+local guiUnmountHandler = Roact.mount(GuiRoot, Players.LocalPlayer.PlayerGui, 'Test GUI')
+-- local guiUnmountHandler = Roact.mount(GuiRootWithStoreHelpers, Players.LocalPlayer.PlayerGui, 'Test GUI')
 
 task.wait(1000)
 print('Unmounting GUI')
