@@ -31,7 +31,8 @@ local DefaultFrameProps = {
     Size = UDim2.new(0, 100, 0, 100),
 }
 -- The follow properties are rendered by the __BG, __Shadow, __Border Frames
--- Therefore the root Frame are transparent in regards to let them manifest
+-- Since we have to cater Shadow, background is facilitated with a child frame named BG. Otherwise the Shadow will be over root container's own Background
+-- Therefore the root Frame are transparent to let them manifest
 local RootFramePropsOverride = {
     BackgroundTransparency = 1,
     BorderSizePixel = 0,
@@ -49,6 +50,11 @@ local DefaultShadowProps = {
     ZIndex = DefaultZIs.Shadow,
     BorderSizePixel = 0, -- Border is implemented by __Border Element
 }
+local DefaultBorderProps = {
+    Color = Color3.fromRGB(0, 0, 0),
+    Thickness = 1,
+    Transparency = 0,
+}
 local DefaultBorderFrameProps = {
     Position = DefaultBGProps.Position,
     Size = DefaultBGProps.Size,
@@ -57,8 +63,8 @@ local DefaultBorderFrameProps = {
     ZIndex = DefaultZIs.Border,
 }
 local DefaultBorderStrokeProps = {
-    Color = Color3.fromRGB(0, 0, 0),
-    Thickness = 0,
+    Color = DefaultBorderProps.Color,
+    Thickness = DefaultBorderProps.Thickness,
     Transparency = 0, -- Not setting this default value means it follows __BG Frame's
 }
 
@@ -102,26 +108,28 @@ function Box:render()
 
     -- Border
     if _props.Border then
-        local _borderThickness = _props.Border.Thickness or _props.BorderSizePixel
+        local _borderProps = TableUtil.Assign(DefaultBorderProps, _props.Border)
+        _borderProps.Thickness = _borderProps.Thickness or _props.BorderSizePixel
         local _renderBorderElement = _props.Border.forceRenderBorderFrame or (
-            (_borderThickness >= 1) and (
+            (_borderProps.Thickness >= 1) and (
                 -- Roblox's logic, border's transparency is effected by Parent
-                _props.Border.Transparency ~= (_bgProps and _bgProps.BackgroundTransparency)
+                _borderProps.Transparency ~= (_bgProps and _bgProps.BackgroundTransparency)
                 -- Roblox's logic, parent instance's Corner once set, border should use UIStroke
-                or (_bgProps and _bgProps.CornerRadius and _props.Border.CornerRadius ~= _bgProps.CornerRadius)
+                or (_bgProps and _bgProps.CornerRadius and _borderProps.CornerRadius ~= _bgProps.CornerRadius)
                 -- Other properties that requires to use UIStroke to render border
-                or _props.Border.Size
-                or _props.Border.Offset
-                or _props.Border.LineJoinMode
-                or _props.Border.ApplyStrokeMode
-        )
+                or _borderProps.Size
+                or _borderProps.Rotation
+                or _borderProps.Offset
+                or _borderProps.LineJoinMode
+                or _borderProps.ApplyStrokeMode
+            )
         )
         local _borderStrokeProps = TableUtil.Assign(DefaultBorderStrokeProps, {
-            Color = _props.Border.Color,
-            Thickness = _borderThickness,
-            Transparency = _props.Border.Transparency,
-            LineJoinMode = _props.Border.LineJoinMode,
-            ApplyStrokeMode = _props.Border.ApplyStrokeMode,
+            Color = _borderProps.Color,
+            Thickness = _borderProps.Thickness,
+            Transparency = _borderProps.Transparency,
+            LineJoinMode = _borderProps.LineJoinMode,
+            ApplyStrokeMode = _borderProps.ApplyStrokeMode,
         })
 
         -- Border can be rendered as __BG Frame's border or a separated __Border Frame
@@ -131,15 +139,16 @@ function Box:render()
                 _borderFrameProps = TableUtil.Assign(_borderFrameProps, _bgProps)
                 _bgProps.BorderSizePixel = 0
             end
-            if _props.Border.Size then
+            if _borderProps.Size then
                 -- -1 scale because this is relative to Background
-                _borderFrameProps.Size += (_props.Border.Size - UDim2.new(1, 0, 1, 0))
+                _borderFrameProps.Size += (_borderProps.Size - UDim2.new(1, 0, 1, 0))
             end
-            if _props.Border.Offset then _borderFrameProps.Position += _props.Border.Offset end
+            if _borderProps.Offset then _borderFrameProps.Position += _borderProps.Offset end
+            _borderFrameProps.Rotation = _borderProps.Rotation
             _borderFrameProps[Roact.Children] = { UIStroke = Roact.createElement('UIStroke', _borderStrokeProps) }
-            local _borderCornerRadius = _props.Border.CornerRadius or (_bgProps and _bgProps.CornerRadius)
+            local _borderCornerRadius = _borderProps.CornerRadius or (_bgProps and _bgProps.CornerRadius)
             if _borderCornerRadius then
-                _borderFrameProps[Roact.Children].UICorner = Roact.createElement('UICorner', { CornerRadius = _props.Border.CornerRadius })
+                _borderFrameProps[Roact.Children].UICorner = Roact.createElement('UICorner', { CornerRadius = _borderProps.CornerRadius })
             end
             _children.__Border = Roact.createElement('Frame', _borderFrameProps)
         else
@@ -167,19 +176,31 @@ function Box:render()
         end
         _children.__Shadow = Roact.createElement('Frame', _shadowProps)
     end
+
+    -- Scroll??
+    local _scroll = false
+    if _props.Scroll  then
+        _scroll = true
+        for key, value in pairs(_props.Scroll) do
+            _props[key] = value
+        end
+    end
     
     -- clear non-standard properties from actual Roblox Instance
     _props.Background = nil
     _props.Border = nil
     _props.Shadow = nil
     _props.bgIgnorePadding = nil
+    _props.Scroll = nil
 
     if _bgProps then
         _children.__BG = Roact.createElement('Frame', _bgProps)
     end
     _props[Roact.Children] = _children
     _props = TableUtil.Assign(_props, RootFramePropsOverride) -- Remove all properties that are NOT related to the root frame
-    return Roact.createElement('Frame', _props)
+    return _scroll
+        and Roact.createElement('ScrollingFrame', _props)
+        or Roact.createElement('Frame', _props)
 end
 
 return Box
