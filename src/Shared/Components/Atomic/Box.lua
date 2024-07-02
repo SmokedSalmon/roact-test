@@ -82,27 +82,32 @@ function Box:render()
     end
 
     -- Padding
+    local _paddingProps = {}
     if _props.Padding then
-        local _paddingProps = TableUtil.Assign(DefaultPadding, _props.Padding)
+        _paddingProps = TableUtil.Assign(DefaultPadding, _props.Padding)
         _children.Padding = Roact.createElement('UIPadding', _paddingProps)
-        _props.Padding = nil
     end
 
     -- Background
-    local _bgProps = nil
+    local _bgProps
     if _props.Background then
         _bgProps = TableUtil.Assign(DefaultBGProps, {
             BackgroundColor3 = _props.Background.Color3,
-            BackgroundTransparency = _props.Background.Transparency,
+            BackgroundTransparency = _props.Background.Transparency or 0,
             BorderColor3 = _props.BorderColor3,
         })
         if not _props.bgIgnorePadding then
             _bgProps.Position -= UDim2.new(_paddingProps.PaddingLeft, _paddingProps.PaddingTop)
             _bgProps.Size += UDim2.new(_paddingProps.PaddingLeft, _paddingProps.PaddingTop) + UDim2.new(_paddingProps.PaddingRight, _paddingProps.PaddingBottom)
         end
+        _bgProps[Roact.Children] = {}
         if _props.Background.CornerRadius then
-            _bgProps[Roact.Children] = { UICorner = Roact.createElement('UICorner', { CornerRadius = _props.Background.CornerRadius }) }
+            _bgProps[Roact.Children].UICorner = Roact.createElement('UICorner', { CornerRadius = _props.Background.CornerRadius })
         end
+        if _props.Background.Image then
+            _bgProps[Roact.Children].Image = Roact.createElement('ImageLabel', _props.Background.Image)
+        end
+        _bgProps.ZIndex = DefaultZIs.BG
         -- render after Border & Shadow as it might be impact by them
     end
 
@@ -150,6 +155,7 @@ function Box:render()
             if _borderCornerRadius then
                 _borderFrameProps[Roact.Children].UICorner = Roact.createElement('UICorner', { CornerRadius = _borderProps.CornerRadius })
             end
+            _borderFrameProps.ZIndex = DefaultZIs.Border
             _children.__Border = Roact.createElement('Frame', _borderFrameProps)
         else
             if _bgProps then _bgProps.BorderSizePixel = _borderStrokeProps.Thickness end
@@ -161,7 +167,7 @@ function Box:render()
         local _shadowProps = TableUtil.Assign(DefaultShadowProps, {
             Size = _bgProps.Size,
             BackgroundColor3 = _props.Shadow.Color3,
-            BackgroundTransparency = _props.Shadow.Transparency,
+            BackgroundTransparency = _props.Shadow.Transparency or 0,
         })
         if _bgProps then
             _shadowProps.Position = _bgProps.Position + (_props.Shadow.Offset or DefaultShadowOffset)
@@ -174,6 +180,7 @@ function Box:render()
         if _shadowCornerRadius then
             _shadowProps[Roact.Children] = { UICorner = Roact.createElement('UICorner', { CornerRadius = _shadowCornerRadius }) }
         end
+        _shadowProps.ZIndex = DefaultZIs.Shadow
         _children.__Shadow = Roact.createElement('Frame', _shadowProps)
     end
 
@@ -187,6 +194,7 @@ function Box:render()
     end
     
     -- clear non-standard properties from actual Roblox Instance
+    _props.Padding = nil
     _props.Background = nil
     _props.Border = nil
     _props.Shadow = nil

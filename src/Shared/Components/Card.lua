@@ -19,6 +19,23 @@ local DefaultPadding = {
 
 local Card = Roact.PureComponent:extend('Card')
 
+local function ContentBox(rotation: number, children: {Roact.Component}?)
+    return Roact.createElement(Box, {
+        Size = UDim2.new(1, 0, 1, 0),
+        Background = {
+            Image = {
+                Size = UDim2.new(1, 0, 0.7, 0),
+                Image = 'rbxasset://textures/ui/GuiImagePlaceholder.png',
+            }
+        },
+        Rotation = rotation,
+    }, children)
+end
+
+function Card:init()
+    self._rotation = math.random(-1.5, 1.5)
+end
+
 function Card:render()
     -- print(`Card render`)
     local _props = TableUtil.Assign({
@@ -26,17 +43,17 @@ function Card:render()
         Border = {
             Thickness = 2,
             CornerRadius = UDim.new(0, 5),
-            Rotation = 2,
+            Rotation = self._rotation,
         }
     }, self.props)
+    
+    local children = _props[Roact.Children]
+    _props[Roact.Children] = { Content = ContentBox(self._rotation, children)}
+
     _props.Name = _props.Name or 'Card'
     -- _props.ClipDescendants = true
 
     return Roact.createElement(Box, _props)
-end
-
-function Card:init()
-    -- print('Card Initiated')
 end
 
 -- function Card:shouldUpdate(np, ns)

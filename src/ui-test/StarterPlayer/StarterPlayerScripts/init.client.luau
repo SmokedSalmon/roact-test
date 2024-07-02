@@ -40,14 +40,16 @@ local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
 }, {
     Root = GlobalStore.ProvideFor({
         TestContainer = Roact.createElement(Box, {
-            Position = UDim2.new(0, 0, 0, 0),
-            Size = UDim2.new(1, 0, 1, 0),
-            Padding = {
-                PaddingLeft = UDim.new(0, 50),
-                PaddingTop = UDim.new(0, 50),
-                PaddingRight = UDim.new(0, 50),
-                PaddingBottom = UDim.new(0, 50),
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            Position = UDim2.new(0.5, 0, 0.5, 0),
+            Size = UDim2.new(0.7, 0, 0.7, 0),
+            Background = {
+                Color3 = Color3.fromRGB(118, 214, 255),
             },
+            Shadow = {
+                Color3 = Color3.fromRGB(0, 84, 147),
+                Offset = UDim2.new(0, 5, 0, 5)
+            }
         }, {
             -- Test a single Button
             -- Button1 = Roact.createElement(Button, {
@@ -72,19 +74,26 @@ local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
             -- Test A single Card
             -- Card1 = Roact.createElement(Card, {}),
 
+            -- Test for Panel Sign
+            SignLabel = Roact.createElement(TestUIComponents.TestShadowedSignText, {
+                Text = 'Arsenal',
+                TextSize = 50,
+                Color = Color3.fromRGB(255, 255, 255),
+                ShadowColor = Color3.fromRGB(115, 250, 121),
+            }),
             -- Test Grid Container
             Container1 = Roact.createElement(GridContainer, {}, {
-                Card1 = Roact.createElement(Card, {}),
-                Card2 = Roact.createElement(Card, {}),
-                Card3 = Roact.createElement(Card, {}),
-                Card4 = Roact.createElement(Card, {}),
-                Card5 = Roact.createElement(Card, {}),
-                Card6 = Roact.createElement(Card, {}),
-                Card7 = Roact.createElement(Card, {}),
-                Card8 = Roact.createElement(Card, {}),
-                Card9 = Roact.createElement(Card, {}),
-                Card10 = Roact.createElement(Card, {}),
-                Card11 = Roact.createElement(Card, {}),
+                Card1 = TestUIComponents.TestArsenalCard(),
+                Card2 = TestUIComponents.TestArsenalCard(),
+                Card3 = TestUIComponents.TestArsenalCard(),
+                Card4 = TestUIComponents.TestArsenalCard(),
+                Card5 = TestUIComponents.TestArsenalCard(),
+                Card6 = TestUIComponents.TestArsenalCard(),
+                Card7 = TestUIComponents.TestArsenalCard(),
+                Card8 = TestUIComponents.TestArsenalCard(),
+                Card9 = TestUIComponents.TestArsenalCard(),
+                Card10 = TestUIComponents.TestArsenalCard(),
+                Card11 = TestUIComponents.TestArsenalCard(),
             })
         })
     })
