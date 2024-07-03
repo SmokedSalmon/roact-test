@@ -27,7 +27,7 @@ local function TestMainMenuButton(name)
         },
         Button = {
             Text = name,
-            FontFace = Font.fromName('JosefinSans'),
+            FontFace = Font.new('rbxasset://fonts/families/JosefinSans.json'),
             TextSize = 50,
             TextXAlignment = Enum.TextXAlignment.Center,
             TextYAlignment = Enum.TextYAlignment.Center,
@@ -49,7 +49,7 @@ local function TestTabButton(props: {})
     return Roact.createElement(Button, {
         Button = {
             Text = props.Text,
-            FontFace = Font.fromName('JosefinSans'),
+            FontFace = Font.new('rbxasset://fonts/families/JosefinSans.json'),
             TextSize = 26,
             TextXAlignment = Enum.TextXAlignment.Center,
             TextYAlignment = Enum.TextYAlignment.Center,
@@ -127,7 +127,7 @@ function TestShadowedSignText(props: {}?)
         Size = UDim2.new(0, 200, 0, 50),
         Color = Color3.fromRGB(255, 255, 255),
         ShadowColor = Color3.fromRGB(115, 250, 121),
-        FontFace = Font.new('JosefinSans', Enum.FontWeight.Bold),
+        FontFace = Font.new('rbxasset://fonts/families/JosefinSans.json', Enum.FontWeight.Bold),
         TextXAlignment = Enum.TextXAlignment.Center,
         TextYAlignment = Enum.TextYAlignment.Center,
     }
@@ -216,6 +216,7 @@ function TestLevelCard()
         }
     })
 end
+
 function TestLevelPage()
     return Roact.createElement(Box, {
         AnchorPoint = Vector2.new(0.5, 0.5),
@@ -250,7 +251,7 @@ function TestLevelPage()
             Button2 = TestTabButton({ Text = 'Block Them Up' }),
             Button3 = TestTabButton({ Text = 'Combos, Tech-up' }),
         }),
-        -- Grid Container
+        -- Row/Column Container
         Container1 = Roact.createElement(RowContainer, {
             Position = UDim2.new(0.1, 0, 0.15, 0),
             Size = UDim2.new(0.9, 0, 0.85, 0),
@@ -312,6 +313,61 @@ function TestLevelPage()
     })
 end
 
+function TestDescPage()
+    local _leftRotation = -2
+    local _rightRotation = 1
+    return Roact.createElement(Box, {
+        Size = UDim2.new(1, 0, 1, 0),
+    }, {
+        LeftPanel = Roact.createElement(Box, {
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            Position = UDim2.new(0.308, 0, 0.5, 0),
+            Size = UDim2.new(0.416, 0, 0.8, 0),
+            Background = {
+                Color3 = Color3.fromRGB(118, 214, 255),
+                Rotation = _leftRotation,
+                CornerRadius = UDim.new(0, 5),
+            },
+            Shadow = {
+                Color3 = Color3.fromRGB(0, 84, 147),
+                Offset = UDim2.new(0, 5, 0, 5),
+                Rotation = _leftRotation + 1,
+            },
+        }, {
+            SignLabel = Roact.createElement(TestShadowedSignText, {
+                Text = 'Dart-Tower',
+                TextSize = 50,
+                Color = Color3.fromRGB(255, 255, 255),
+                ShadowColor = Color3.fromRGB(115, 250, 121),
+            }),
+            Container1 = Roact.createElement(RowContainer, {
+                Position = UDim2.new(0.1, 0, 0.15, 0),
+                Size = UDim2.new(0.9, 0, 0.85, 0),
+                List = {
+                    Padding = UDim.new(0, 10),
+                }
+            }, {
+                Row1 = Roact.createElement(Box, {
+                    AutomaticSize = Enum.AutomaticSize.Y,
+                    Size = UDim2.new(1, 0, 0, 0),
+                }, {
+                    TowerDesc = Roact.createElement('TextLabel', {
+                        BackgroundTransparency = 1,
+                        AutomaticSize = Enum.AutomaticSize.Y,
+                        Size = UDim2.new(1, 0, 0, 0),
+                        Text = 'Integer ante lorem, placerat eu pellentesque non, scelerisque ac libero. Pellentesque ultrices a tortor vitae pharetra. Mauris posuere ipsum ipsum, vel interdum eros malesuada id. Sed rutrum at ligula a vulputate. Aliquam in placerat orci. platea dictumst.',
+                        FontFace = Font.fromName('SourceSansPro'),
+                        TextSize = 14,
+                        TextXAlignment = Enum.TextXAlignment.Left,
+                        TextYAlignment = Enum.TextYAlignment.Top,
+                        TextWrapped = true,
+                    })
+                }),
+            }),
+        })
+    })
+end
+
 return {
     TestTabButton = TestTabButton,
     TestMainMenu = TestMainMenu,
@@ -319,4 +375,5 @@ return {
     TestShadowedSignText = TestShadowedSignText,
     TestArsenalPage = TestArsenalPage,
     TestLevelPage = TestLevelPage,
+    TestDescPage = TestDescPage,
 }

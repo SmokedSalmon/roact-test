@@ -75,7 +75,8 @@ local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
         --     -- Card1 = Roact.createElement(Card, {}),
         -- })
         -- ArsenalPage = TestUIComponents.TestArsenalPage(),
-        SelectLevelPage = TestUIComponents.TestLevelPage(),
+        -- SelectLevelPage = TestUIComponents.TestLevelPage(),
+        DescPage = TestUIComponents.TestDescPage(),
     })
 })
 

@@ -95,6 +95,7 @@ function Box:render()
         _bgProps = TableUtil.Assign(DefaultBGProps, {
             BackgroundColor3 = _props.Background.Color3,
             BackgroundTransparency = _props.Background.Transparency or 0,
+            Rotation = _props.Background.Rotation,
             BorderColor3 = _props.BorderColor3,
         })
         if not _props.bgIgnorePadding then
@@ -170,6 +171,7 @@ function Box:render()
             Size = _bgProps.Size,
             BackgroundColor3 = _props.Shadow.Color3,
             BackgroundTransparency = _props.Shadow.Transparency or 0,
+            Rotation = _props.Shadow.Rotation,
         })
         if _bgProps then
             _shadowProps.Position = _bgProps.Position + (_props.Shadow.Offset or DefaultShadowOffset)
