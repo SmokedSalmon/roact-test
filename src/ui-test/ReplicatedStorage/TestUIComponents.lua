@@ -9,7 +9,9 @@ local AtomicComponents = Components.Atomic
 local StoreService = require(ReplicatedStorage.Shared.Store)
 local Modal = require(Components.Modal)
 local WithCustomBackground = require(AtomicComponents.WithCustomBackground)
-local GridContainer = require(AtomicComponents.GridContainer)
+local GridContainer = require(Components.GridContainer)
+local RowContainer = require(Components.RowContainer)
+local ColumnContainer = require(Components.ColumnContainer)
 local Card = require(Components.Card)
 local Button = require(Components.Button)
 local ListContainer = require(AtomicComponents.ListContainer)
@@ -40,6 +42,25 @@ local function TestMainMenuButton(name)
     })
 end
 
+local function TestTabButton(props: {})
+    if not props then
+        error('Missing props for button')
+    end
+    return Roact.createElement(Button, {
+        Button = {
+            Text = props.Text,
+            FontFace = Font.fromName('JosefinSans'),
+            TextSize = 26,
+            TextXAlignment = Enum.TextXAlignment.Center,
+            TextYAlignment = Enum.TextYAlignment.Center,
+        },
+        Event = {
+            Activated = function() print('Pressed') end,
+            TouchTap = function() print('Tapped') end,
+        },
+    })
+end
+
 local TestMainMenu = Roact.createElement(Box, {
     AnchorPoint = Vector2.new(0.5, 0.5),
     Position = UDim2.new(0.5, 0, 0.5, 0),
@@ -61,15 +82,16 @@ local TestMainMenu = Roact.createElement(Box, {
     })
 })
 
-function TestArsenalCard()
-    return Roact.createElement(Card, {
+function TestItemCard(cardProps: {}?)
+    local _props = TableUtil.Assign({
         Padding = {
             PaddingLeft = UDim.new(0, 10),
             PaddingTop = UDim.new(0, 10),
             PaddingRight = UDim.new(0, 10),
             PaddingBottom = UDim.new(0, 10),
-        },
-    }, {
+        }
+    }, cardProps)
+    return Roact.createElement(Card, cardProps, {
         Infos = Roact.createElement(Box, {
             Position = UDim2.new(0.3, 0, 0.35, 0),
             Size = UDim2.new(0.7, 0, 0.65, 0),
@@ -128,8 +150,173 @@ function TestShadowedSignText(props: {}?)
     })
 end
 
+function TestArsenalPage()
+    return Roact.createElement(Box, {
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        Position = UDim2.new(0.5, 0, 0.5, 0),
+        Size = UDim2.new(0.7, 0, 0.7, 0),
+        Background = {
+            Color3 = Color3.fromRGB(118, 214, 255),
+            CornerRadius = UDim.new(0, 15),
+        },
+        Shadow = {
+            Color3 = Color3.fromRGB(0, 84, 147),
+            Offset = UDim2.new(0, 5, 0, 5)
+        }
+    }, {
+        
+        -- Panel Sign
+        SignLabel = Roact.createElement(TestShadowedSignText, {
+            Text = 'Arsenal',
+            TextSize = 50,
+            Color = Color3.fromRGB(255, 255, 255),
+            ShadowColor = Color3.fromRGB(115, 250, 121),
+        }),
+        -- Left Tab
+        LeftTab = Roact.createElement(Box, {
+            Position = UDim2.new(-0.15, 0, 0.2, 0),
+            Size = UDim2.new(0.3, 0.85),
+        }, {
+            UIListLayout = Roact.createElement('UIListLayout', {
+                FillDirection = Enum.FillDirection.Vertical,
+                HorizontalAlignment = Enum.HorizontalAlignment.Center,
+            }),
+            Button1 = TestTabButton({ Text = 'Play' }),
+            Button2 = TestTabButton({ Text = 'Arsenal' }),
+            Button3 = TestTabButton({ Text = 'Encyclopedia' }),
+        }),
+        -- Test Grid Container
+        Container1 = Roact.createElement(GridContainer, {
+            Position = UDim2.new(0.1, 0, 0.15, 0),
+            Size = UDim2.new(0.9, 0, 0.85, 0),
+        }, {
+            Card1 = TestItemCard(),
+            Card2 = TestItemCard(),
+            Card3 = TestItemCard(),
+            Card4 = TestItemCard(),
+            Card5 = TestItemCard(),
+            Card6 = TestItemCard(),
+            Card7 = TestItemCard(),
+            Card8 = TestItemCard(),
+            Card9 = TestItemCard(),
+            Card10 = TestItemCard(),
+            Card11 = TestItemCard(),
+        })
+    })
+end
+
+function TestLevelCard()
+    return TestItemCard({
+        Size = UDim2.new(0, 160, 0, 100 ),
+        Padding = {
+            PaddingLeft = UDim.new(0, 10),
+            PaddingTop = UDim.new(0, 10),
+            PaddingRight = UDim.new(0, 10),
+            PaddingBottom = UDim.new(0, 10),
+        }
+    })
+end
+function TestLevelPage()
+    return Roact.createElement(Box, {
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        Position = UDim2.new(0.5, 0, 0.5, 0),
+        Size = UDim2.new(0.7, 0, 0.7, 0),
+        Background = {
+            Color3 = Color3.fromRGB(118, 214, 255),
+            CornerRadius = UDim.new(0, 5),
+        },
+        Shadow = {
+            Color3 = Color3.fromRGB(0, 84, 147),
+            Offset = UDim2.new(0, 5, 0, 5)
+        }
+    }, {
+        -- Panel Sign
+        SignLabel = Roact.createElement(TestShadowedSignText, {
+            Text = 'Select Level',
+            TextSize = 50,
+            Color = Color3.fromRGB(255, 255, 255),
+            ShadowColor = Color3.fromRGB(115, 250, 121),
+        }),
+        -- Left Tab
+        LeftTab = Roact.createElement(Box, {
+            Position = UDim2.new(-0.15, 0, 0.2, 0),
+            Size = UDim2.new(0.3, 0.85),
+        }, {
+            UIListLayout = Roact.createElement('UIListLayout', {
+                FillDirection = Enum.FillDirection.Vertical,
+                HorizontalAlignment = Enum.HorizontalAlignment.Center,
+            }),
+            Button1 = TestTabButton({ Text = 'Basics' }),
+            Button2 = TestTabButton({ Text = 'Block Them Up' }),
+            Button3 = TestTabButton({ Text = 'Combos, Tech-up' }),
+        }),
+        -- Grid Container
+        Container1 = Roact.createElement(RowContainer, {
+            Position = UDim2.new(0.1, 0, 0.15, 0),
+            Size = UDim2.new(0.9, 0, 0.85, 0),
+            List = {
+                Padding = UDim.new(0, 10),
+            }
+        }, {
+            Row1 = Roact.createElement(Box, {
+                AutomaticSize = Enum.AutomaticSize.Y,
+                Size = UDim2.new(1, 0, 0, 0),
+            }, {
+                ChapterDesc = Roact.createElement('TextLabel', {
+                    BackgroundTransparency = 1,
+                    AutomaticSize = Enum.AutomaticSize.Y,
+                    Size = UDim2.new(1, 0, 0, 0),
+                    Text = 'Integer ante lorem, placerat eu pellentesque non, scelerisque ac libero. Pellentesque ultrices a tortor vitae pharetra. Mauris posuere ipsum ipsum, vel interdum eros malesuada id. Sed rutrum at ligula a vulputate. Aliquam in placerat orci. platea dictumst.',
+                    FontFace = Font.fromName('SourceSansPro'),
+                    TextSize = 14,
+                    TextXAlignment = Enum.TextXAlignment.Left,
+                    TextYAlignment = Enum.TextYAlignment.Top,
+                    TextWrapped = true,
+                })
+            }),
+            Row2 = Roact.createElement(ColumnContainer, {
+                AutomaticSize = Enum.AutomaticSize.Y,
+                Size = UDim2.new(1, 0, 0, 0),
+            }, {
+                Card1 = TestLevelCard(),
+                Card2 = TestLevelCard(),
+                Card3 = TestLevelCard(),
+                Card4 = TestLevelCard(),
+                Card5 = TestLevelCard(),
+            }),
+            Row3 = Roact.createElement(ColumnContainer, {
+                AutomaticSize = Enum.AutomaticSize.Y,
+                Size = UDim2.new(1, 0, 0, 0),
+            }, {
+                Card1 = TestLevelCard(),
+                Card2 = TestLevelCard(),
+                Card3 = TestLevelCard(),
+            }),
+            Row4 = Roact.createElement(ColumnContainer, {
+                AutomaticSize = Enum.AutomaticSize.Y,
+                Size = UDim2.new(1, 0, 0, 0),
+            }, {
+                Card1 = TestLevelCard(),
+                Card2 = TestLevelCard(),
+                Card3 = TestLevelCard(),
+            }),
+            Row5 = Roact.createElement(ColumnContainer, {
+                AutomaticSize = Enum.AutomaticSize.Y,
+                Size = UDim2.new(1, 0, 0, 0),
+            }, {
+                Card1 = TestLevelCard(),
+                Card2 = TestLevelCard(),
+                Card3 = TestLevelCard(),
+            }),
+        })
+    })
+end
+
 return {
+    TestTabButton = TestTabButton,
     TestMainMenu = TestMainMenu,
-    TestArsenalCard = TestArsenalCard,
+    TestItemCard = TestItemCard,
     TestShadowedSignText = TestShadowedSignText,
+    TestArsenalPage = TestArsenalPage,
+    TestLevelPage = TestLevelPage,
 }

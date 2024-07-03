@@ -90,6 +90,7 @@ function Box:render()
 
     -- Background
     local _bgProps
+    local _bgCornerRadius
     if _props.Background then
         _bgProps = TableUtil.Assign(DefaultBGProps, {
             BackgroundColor3 = _props.Background.Color3,
@@ -103,6 +104,7 @@ function Box:render()
         _bgProps[Roact.Children] = {}
         if _props.Background.CornerRadius then
             _bgProps[Roact.Children].UICorner = Roact.createElement('UICorner', { CornerRadius = _props.Background.CornerRadius })
+            _bgCornerRadius = _props.Background.CornerRadius
         end
         if _props.Background.Image then
             _bgProps[Roact.Children].Image = Roact.createElement('ImageLabel', _props.Background.Image)
@@ -176,7 +178,7 @@ function Box:render()
             -- -1 scale because this is relative to Background
             _shadowProps.Size += (_props.Shadow.Size - UDim2.new(1, 0, 1, 0))
         end
-        local _shadowCornerRadius = _props.Shadow.CornerRadius or (_bgProps and _bgProps.CornerRadius)
+        local _shadowCornerRadius = _props.Shadow.CornerRadius or _bgCornerRadius
         if _shadowCornerRadius then
             _shadowProps[Roact.Children] = { UICorner = Roact.createElement('UICorner', { CornerRadius = _shadowCornerRadius }) }
         end

@@ -1,5 +1,5 @@
 --[[
-    List Container Component that arrange items in List Layout
+    List Container Component that arranges items in Horizontal List Layout
 ]]
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Roact = require(ReplicatedStorage.Packages.roact)

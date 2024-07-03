@@ -23,6 +23,7 @@ local function ContentBox(rotation: number, children: {Roact.Component}?)
     return Roact.createElement(Box, {
         Size = UDim2.new(1, 0, 1, 0),
         Background = {
+            Transparency = 1,
             Image = {
                 Size = UDim2.new(1, 0, 0.7, 0),
                 Image = 'rbxasset://textures/ui/GuiImagePlaceholder.png',

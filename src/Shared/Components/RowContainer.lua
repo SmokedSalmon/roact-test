@@ -1,5 +1,5 @@
 --[[
-    Grid Container, made for Items/Cards put in a grid/table
+    Row Container, Listed Rows
     Scrollable
 ]]
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
@@ -12,10 +12,6 @@ local Box = require(AtomicComponents.Box)
 local DefaultRootContainerProps = {
     Position = UDim2.new(0, 0, 0, 0),
     Size = UDim2.new(1, 0, 1, 0),
-    -- [TODO] make this a Container Root Component
-    Background = {
-        Transparency = 1,
-    },
     BorderSizePixel = 0,
     AutomaticSize = Enum.AutomaticSize.None,
     -- Scrolling
@@ -29,25 +25,22 @@ local DefaultRootContainerProps = {
         VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
     }
 }
--- local DefaultTextButtonProps = {
---     Size = UDim2.new(1, 0, 1, 0),
---     AutomaticSize = Enum.AutomaticSize.XY, -- Default fit to content
--- }
 
-local GridContainer = Roact.Component:extend('GridContainer')
+local RowContainer = Roact.Component:extend('RowContainer')
 
-function GridContainer:render()
+function RowContainer:render()
     local _props = TableUtil.Assign(DefaultRootContainerProps, self.props or {})
 
     _props[Roact.Children] = TableUtil.Assign({
-        UIGridLayout = Roact.createElement('UIGridLayout', {
-            CellPadding = UDim2.new(0, 0, 0, 0),
-            CellSize = UDim2.new(1/3, 0, 1/3, 0), -- TODO Parameterized
-            FillDirection = Enum.FillDirection.Horizontal,
+        UIListLayout = Roact.createElement('UIListLayout', {
+            FillDirection = Enum.FillDirection.Vertical,
+            VerticalFlex = Enum.UIFlexAlignment.SpaceBetween,
+            Padding = (_props.List and _props.List.Padding) or nil,
         }, {}),
     }, _props[Roact.Children])
+    _props.List = nil
     
     return Roact.createElement(Box, _props)
 end
 
-return GridContainer
+return RowContainer

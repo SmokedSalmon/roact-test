@@ -1,6 +1,5 @@
 --[[
-    Grid Container, made for Items/Cards put in a grid/table
-    Scrollable
+    Column Container Component that arranges items in Horizontal List Layout
 ]]
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Roact = require(ReplicatedStorage.Packages.roact)
@@ -12,42 +11,33 @@ local Box = require(AtomicComponents.Box)
 local DefaultRootContainerProps = {
     Position = UDim2.new(0, 0, 0, 0),
     Size = UDim2.new(1, 0, 1, 0),
-    -- [TODO] make this a Container Root Component
-    Background = {
-        Transparency = 1,
-    },
-    BorderSizePixel = 0,
     AutomaticSize = Enum.AutomaticSize.None,
     -- Scrolling
     Scroll = {
-        AutomaticCanvasSize = Enum.AutomaticSize.Y,
+        AutomaticCanvasSize = Enum.AutomaticSize.X,
         CanvasPosition = Vector2.new(0, 0),
         CanvasSize = UDim2.new(0, 0, 0, 0),
         ScrollBarThickness = 12,
-        ScrollingDirection = Enum.ScrollingDirection.Y,
-        VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar,
-        VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
+        ScrollingDirection = Enum.ScrollingDirection.X,
+        HorizontalScrollBarInset = Enum.ScrollBarInset.ScrollBar,
     }
 }
--- local DefaultTextButtonProps = {
---     Size = UDim2.new(1, 0, 1, 0),
---     AutomaticSize = Enum.AutomaticSize.XY, -- Default fit to content
--- }
 
-local GridContainer = Roact.Component:extend('GridContainer')
+local ColumnContainer = Roact.Component:extend('RowContainer')
 
-function GridContainer:render()
+function ColumnContainer:render()
     local _props = TableUtil.Assign(DefaultRootContainerProps, self.props or {})
 
     _props[Roact.Children] = TableUtil.Assign({
-        UIGridLayout = Roact.createElement('UIGridLayout', {
-            CellPadding = UDim2.new(0, 0, 0, 0),
-            CellSize = UDim2.new(1/3, 0, 1/3, 0), -- TODO Parameterized
+        UIListLayout = Roact.createElement('UIListLayout', {
             FillDirection = Enum.FillDirection.Horizontal,
+            VerticalAlignment = Enum.VerticalAlignment.Center,
+            Padding = (_props.List and _props.List.Padding) or nil,
         }, {}),
     }, _props[Roact.Children])
+    _props.List = nil
     
     return Roact.createElement(Box, _props)
 end
 
-return GridContainer
+return ColumnContainer

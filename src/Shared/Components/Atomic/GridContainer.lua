@@ -1,6 +1,7 @@
 --[[
     Grid Container Component that arrange items in rows and columns which is similar to the CSS Flex-box layout
     [TODO] How to set row count & column count? use CellSize
+    @deprecated
 ]]
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Roact = require(ReplicatedStorage.Packages.roact)
