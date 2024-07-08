@@ -23,6 +23,10 @@ local DefaultRootContainerProps = {
         ScrollingDirection = Enum.ScrollingDirection.Y,
         VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar,
         VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
+    },
+    List = {
+        FillDirection = Enum.FillDirection.Vertical,
+        VerticalFlex = Enum.UIFlexAlignment.SpaceBetween,
     }
 }
 
@@ -32,11 +36,7 @@ function RowContainer:render()
     local _props = TableUtil.Assign(DefaultRootContainerProps, self.props or {})
 
     _props[Roact.Children] = TableUtil.Assign({
-        UIListLayout = Roact.createElement('UIListLayout', {
-            FillDirection = Enum.FillDirection.Vertical,
-            VerticalFlex = Enum.UIFlexAlignment.SpaceBetween,
-            Padding = (_props.List and _props.List.Padding) or nil,
-        }, {}),
+        UIListLayout = Roact.createElement('UIListLayout', _props.List),
     }, _props[Roact.Children])
     _props.List = nil
     
