@@ -20,6 +20,7 @@ local Modal = require(Components.Modal)
 local WithCustomBackground = require(AtomicComponents.WithCustomBackground)
 local Box = require(AtomicComponents.Box)
 local Button = require(Components.Button)
+local TButton = require(Components.TButton)
 local Card = require(Components.Card)
 local GridContainer = require(ReplicatedStorage.Shared.Components.GridContainer)
 local TestUIComponents = require(ReplicatedStorage.TestUIComponents)
@@ -39,44 +40,64 @@ local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
     IgnoreGuiInset = true,
 }, {
     Root = GlobalStore.ProvideFor({
-        -- TestContainer = Roact.createElement(Box, {
-        --     AnchorPoint = Vector2.new(0.5, 0.5),
-        --     Position = UDim2.new(0.5, 0, 0.5, 0),
-        --     Size = UDim2.new(0.7, 0, 0.7, 0),
-        --     Background = {
-        --         Color3 = Color3.fromRGB(118, 214, 255),
-        --     },
-        --     Shadow = {
-        --         Color3 = Color3.fromRGB(0, 84, 147),
-        --         Offset = UDim2.new(0, 5, 0, 5)
-        --     }
-        -- }, {
-        --     -- Test a single Button
-        --     -- Button1 = Roact.createElement(Button, {
-        --     --     Padding = {
-        --     --         PaddingLeft = UDim.new(0, 20),
-        --     --         PaddingTop = UDim.new(0, 20),
-        --     --         PaddingRight = UDim.new(0, 20),
-        --     --         PaddingBottom = UDim.new(0, 20),
-        --     --     },
-        --     --     Button = {
-        --     --         Text = 'Click Me'
-        --     --     },
-        --     --     Event = {
-        --     --         Activated = function() print('Pressed') end,
-        --     --         MouseEnter = function() print('Mouse Entered') end,
-        --     --         MouseLeave = function() print('Mouse Left') end,
-        --     --         TouchPan = function() print('Panned') end,
-        --     --         TouchTap = function() print('Tapped') end,
-        --     --     },
-        --     -- })
+        TestContainer = Roact.createElement(Box, {
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            Position = UDim2.new(0.5, 0, 0.5, 0),
+            Size = UDim2.new(0.7, 0, 0.7, 0),
+            Background = {
+                Color3 = Color3.fromRGB(118, 214, 255),
+            },
+            Shadow = {
+                Color3 = Color3.fromRGB(0, 84, 147),
+                Offset = UDim2.new(0, 5, 0, 5)
+            }
+        }, {
+            -- Test a single Button
+            -- Button1 = Roact.createElement(Button, {
+            --     Padding = {
+            --         PaddingLeft = UDim.new(0, 20),
+            --         PaddingTop = UDim.new(0, 20),
+            --         PaddingRight = UDim.new(0, 20),
+            --         PaddingBottom = UDim.new(0, 20),
+            --     },
+            --     Button = {
+            --         Text = 'Click Me'
+            --     },
+            --     Event = {
+            --         Activated = function() print('Pressed') end,
+            --         MouseEnter = function() print('Mouse Entered') end,
+            --         MouseLeave = function() print('Mouse Left') end,
+            --         TouchPan = function() print('Panned') end,
+            --         TouchTap = function() print('Tapped') end,
+            --     },
+            -- })
+            TButton = Roact.createElement(TButton, {
+                Padding = {
+                    PaddingLeft = UDim.new(0, 20),
+                    PaddingTop = UDim.new(0, 20),
+                    PaddingRight = UDim.new(0, 20),
+                    PaddingBottom = UDim.new(0, 20),
+                },
+                AnchorPoint = Vector2.new(0.3, 0.6),
+                Position = UDim2.new(0.5, 0, 0.5, 0),
+                Size = UDim2.new(0, 220, 0, 80),
+                Text = 'Click Me',
+                Event = {
+                    Activated = function() print('Pressed') end,
+                    MouseEnter = function() print('Mouse Entered') end,
+                    MouseLeave = function() print('Mouse Left') end,
+                    TouchPan = function() print('Panned') end,
+                    TouchTap = function() print('Tapped') end,
+                },
+            })
 
-        --     -- Test A single Card
-        --     -- Card1 = Roact.createElement(Card, {}),
-        -- })
+            -- Test A single Card
+            -- Card1 = Roact.createElement(Card, {}),
+        })
+        
         -- ArsenalPage = TestUIComponents.TestArsenalPage(),
         -- SelectLevelPage = TestUIComponents.TestLevelPage(),
-        DescPage = TestUIComponents.TestDescPage(),
+        -- DescPage = TestUIComponents.TestDescPage(),
     })
 })
 
