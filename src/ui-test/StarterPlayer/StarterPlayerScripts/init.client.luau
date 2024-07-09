@@ -21,6 +21,8 @@ local WithCustomBackground = require(AtomicComponents.WithCustomBackground)
 local Box = require(AtomicComponents.Box)
 local Button = require(Components.Button)
 local TButton = require(Components.TButton)
+local MixedButton = require(Components.MixedButton)
+local Icon = require(Components.Icon)
 local Card = require(Components.Card)
 local GridContainer = require(ReplicatedStorage.Shared.Components.GridContainer)
 local TestUIComponents = require(ReplicatedStorage.TestUIComponents)
@@ -71,24 +73,70 @@ local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
             --         TouchTap = function() print('Tapped') end,
             --     },
             -- })
-            TButton = Roact.createElement(TButton, {
+
+            -- Test Text Button
+            -- TButton = Roact.createElement(TButton, {
+            --     Padding = {
+            --         PaddingLeft = UDim.new(0, 20),
+            --         PaddingTop = UDim.new(0, 20),
+            --         PaddingRight = UDim.new(0, 20),
+            --         PaddingBottom = UDim.new(0, 20),
+            --     },
+            --     AnchorPoint = Vector2.new(0.3, 0.6),
+            --     Position = UDim2.new(0.5, 0, 0.5, 0),
+            --     Size = UDim2.new(0, 220, 0, 80),
+            --     Text = 'Click Me',
+            --     Event = {
+            --         Activated = function() print('Pressed') end,
+            --         MouseEnter = function() print('Mouse Entered') end,
+            --         MouseLeave = function() print('Mouse Left') end,
+            --         TouchPan = function() print('Panned') end,
+            --         TouchTap = function() print('Tapped') end,
+            --     },
+            -- })
+
+            -- Test Icon
+            -- TestIcon = Roact.createElement(Icon, {
+            --     Padding = {
+            --         PaddingLeft = UDim.new(0, 20),
+            --         PaddingTop = UDim.new(0, 40),
+            --         PaddingRight = UDim.new(0, 20),
+            --         PaddingBottom = UDim.new(0, 40),
+            --     },
+            --     AnchorPoint = Vector2.new(0.5, 0.5),
+            --     Position = UDim2.new(0.5, 0, 0.5, 0),
+            --     Size = UDim2.new(0, 220, 0, 160),
+            --     Image = 'rbxassetid://13384578429',
+            --     ScaleType = Enum.ScaleType.Crop,
+            --     Event = {
+            --         MouseEnter = function() print('Mouse Entered') end,
+            --         MouseLeave = function() print('Mouse Left') end,
+            --     },
+            -- }),
+
+            -- Test Mixed Button
+            TestMixedButton = Roact.createElement(MixedButton, {
                 Padding = {
                     PaddingLeft = UDim.new(0, 20),
-                    PaddingTop = UDim.new(0, 20),
+                    PaddingTop = UDim.new(0, 40),
                     PaddingRight = UDim.new(0, 20),
-                    PaddingBottom = UDim.new(0, 20),
+                    PaddingBottom = UDim.new(0, 40),
                 },
-                AnchorPoint = Vector2.new(0.3, 0.6),
+                AnchorPoint = Vector2.new(0.5, 0.5),
                 Position = UDim2.new(0.5, 0, 0.5, 0),
-                Size = UDim2.new(0, 220, 0, 80),
-                Text = 'Click Me',
-                Event = {
-                    Activated = function() print('Pressed') end,
-                    MouseEnter = function() print('Mouse Entered') end,
-                    MouseLeave = function() print('Mouse Left') end,
-                    TouchPan = function() print('Panned') end,
-                    TouchTap = function() print('Tapped') end,
-                },
+                Size = UDim2.new(0, 220, 0, 160),
+                Button = {
+                    Text = 'Click Me',
+                    Icon = {
+                        Image = 'rbxassetid://13384578429',
+                        ScaleType = Enum.ScaleType.Crop,
+                    }
+                }
+
+                -- Event = {
+                --     MouseEnter = function() print('Mouse Entered') end,
+                --     MouseLeave = function() print('Mouse Left') end,
+                -- },
             })
 
             -- Test A single Card

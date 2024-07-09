@@ -1,5 +1,5 @@
 --[[
-    Text Button Component
+    Icon Component
 ]]
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Roact = require(ReplicatedStorage.Packages.roact)
@@ -8,21 +8,30 @@ local Box = require(ReplicatedStorage.Shared.Components.Atomic.Box)
 local WithEvents = require(ReplicatedStorage.Shared.Components.Atomic.WithEvents)
 
 -- Constants & Configs
+local DefaultPadding = {
+    PaddingLeft = UDim.new(0, 0),
+    PaddingTop = UDim.new(0, 0),
+    PaddingRight = UDim.new(0, 0),
+    PaddingBottom = UDim.new(0, 0),
+}
 local DefaultRootContainerProps = {
     BackgroundTransparency = 1,
     BorderSizePixel = 0,
     AutomaticSize = Enum.AutomaticSize.XY, -- Default fit to content
 }
-local DefaultTextButtonProps = {
+local DefaultIconProps = {
     AnchorPoint = Vector2.new(0, 0),
     Size = UDim2.new(1, 0, 1, 0),
     AutomaticSize = Enum.AutomaticSize.XY, -- Default fit to content
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    ScaleType = Enum.ScaleType.Stretch,
 }
 
-local Button = Roact.Component:extend('Button')
+local Icon = Roact.Component:extend('Icon')
 
-function Button:render()
-    local _props = TableUtil.Assign(DefaultTextButtonProps, self.props)
+function Icon:render()
+    local _props = TableUtil.Assign(DefaultIconProps, self.props)
 
     local _rootBox = _props.Padding
         or _props.Background
@@ -55,14 +64,10 @@ function Button:render()
         -- Root Box already takes over the AnchorPoint as a whole, thus the TextButton always sits in the center
         _props.AnchorPoint = Vector2.new(0.5, 0.5)
         return Roact.createElement(Box, _boxProps, {
-            TextButton = Roact.createElement(WithEvents('TextButton'), _props, {})
+            Icon = Roact.createElement(WithEvents('ImageLabel'), _props, {})
         })
     end
-    return Roact.createElement(WithEvents('TextButton'), _props, {})
+    return Roact.createElement(WithEvents('ImageLabel'), _props, {})
 end
 
-function Button:willUnmount()
-    -- if self.__handlers.onActivated then self.__handlers.onActivated:Disconnect() end
-end
-
-return Button
+return Icon
