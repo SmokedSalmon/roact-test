@@ -98,7 +98,7 @@ function Box:render()
             Rotation = _props.Background.Rotation,
             BorderColor3 = _props.BorderColor3,
         })
-        if not _props.bgIgnorePadding then
+        if _props.bgIgnorePadding then
             _bgProps.Position -= UDim2.new(_paddingProps.PaddingLeft, _paddingProps.PaddingTop)
             _bgProps.Size += UDim2.new(_paddingProps.PaddingLeft, _paddingProps.PaddingTop) + UDim2.new(_paddingProps.PaddingRight, _paddingProps.PaddingBottom)
         end

@@ -30,6 +30,7 @@ local TestUIComponents = require(ReplicatedStorage.TestUIComponents)
 -- Test for Static Menus
 local GuiRoot = Roact.createElement('ScreenGui', {
     IgnoreGuiInset = true,
+    ZIndexBehavior = Enum.ZIndexBehavior.Sibling, -- Otherwise it is default to 'Global'
 }, {
     TestMainMenu = TestUIComponents.TestMainMenu,
 })
@@ -40,6 +41,7 @@ local GlobalStore = StoreService.createStore(defaultValue, 'UIStore')
 
 local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
     IgnoreGuiInset = true,
+    ZIndexBehavior = Enum.ZIndexBehavior.Sibling, -- Otherwise it is default to 'Global'
 }, {
     Root = GlobalStore.ProvideFor({
         TestContainer = Roact.createElement(Box, {
@@ -117,17 +119,31 @@ local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
             -- Test Mixed Button
             TestMixedButton = Roact.createElement(MixedButton, {
                 Padding = {
-                    PaddingLeft = UDim.new(0, 20),
-                    PaddingTop = UDim.new(0, 40),
-                    PaddingRight = UDim.new(0, 20),
-                    PaddingBottom = UDim.new(0, 40),
+                    PaddingLeft = UDim.new(0, 10),
+                    PaddingTop = UDim.new(0, 5),
+                    PaddingRight = UDim.new(0, 10),
+                    PaddingBottom = UDim.new(0, 5),
+                },
+                Background = {
+                    Color3 = Color3.fromRGB(0, 249, 0),
+                    CornerRadius = UDim.new(0, 10),
+                },
+                Shadow = {
+                    Color3 = Color3.fromRGB(0, 144, 81),
                 },
                 AnchorPoint = Vector2.new(0.5, 0.5),
                 Position = UDim2.new(0.5, 0, 0.5, 0),
-                Size = UDim2.new(0, 220, 0, 160),
+                Size = UDim2.new(0, 150, 0, 60),
                 Button = {
+                    Size = UDim2.new(0.65, 0, 0.2, 0),
                     Text = 'Click Me',
+                    FontFace = Font.new('rbxasset://fonts/families/JosefinSans.json'),
+                    TextSize = 18,
+                    TextXAlignment = Enum.TextXAlignment.Right,
+                    TextYAlignment = Enum.TextYAlignment.Center,
                     Icon = {
+                        Size = UDim2.new(0.2, 0, 0.2, 0),
+                        SizeConstraint = Enum.SizeConstraint.RelativeXX,
                         Image = 'rbxassetid://13384578429',
                         ScaleType = Enum.ScaleType.Crop,
                     }

@@ -14,9 +14,13 @@ local DefaultRootContainerProps = {}
 local DefaultButtonProps = {
     AnchorPoint = Vector2.new(0, 0),
     Size = UDim2.new(1, 0, 1, 0),
-    AutomaticSize = Enum.AutomaticSize.XY, -- Default fit to content
+    AutomaticSize = Enum.AutomaticSize.None, -- Frame over content
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
 }
-local DefaultIconProps = {}
+local DefaultIconProps = {
+    AutomaticSize = Enum.AutomaticSize.None, -- Frame over content
+}
 
 local MButton = Roact.Component:extend('MButton')
 
@@ -26,6 +30,10 @@ function MButton:render()
     local _iconProps = TableUtil.Assign(DefaultIconProps, self.props.Button and self.props.Button.Icon)
     _rootProps.Button = nil
     _tButtonProps.Icon = nil
+
+    -- Pointer Interact is handled by the Invisible mask
+    _tButtonProps.Interactable = false
+    _iconProps.Interactable = false
 
     return Roact.createElement(Box, _rootProps, {
         InteractZone = Roact.createElement(WithEvents('TextButton'), {
