@@ -1,17 +1,18 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService('ReplicatedStorage')
+local Players = game:GetService('Players')
 
 local Roact = require(ReplicatedStorage.Packages.roact)
+local RoactRouter = require(ReplicatedStorage.Packages['roact-router'])
 
 -- Hello World Example
--- local app = Roact.createElement("ScreenGui", {}, {
---     HelloWorld = Roact.createElement("TextLabel", {
+-- local app = Roact.createElement('ScreenGui', {}, {
+--     HelloWorld = Roact.createElement('TextLabel', {
 --         Size = UDim2.new(0, 400, 0, 300),
---         Text = "Hello, Roact is launched!"
+--         Text = 'Hello, Roact is launched!'
 --     })
 -- })
 -- Roact.mount(app, Players.LocalPlayer.PlayerGui)
--- print("Client finished")
+-- print('Client finished')
 
 local Components = ReplicatedStorage.Shared.Components
 local AtomicComponents = Components.Atomic
@@ -38,6 +39,108 @@ local GuiRoot = Roact.createElement('ScreenGui', {
 -- Test for Store Helpers
 local defaultValue = { Scope1 = { Text = 'Passed Down' } }
 local GlobalStore = StoreService.createStore(defaultValue, 'UIStore')
+
+-- Test for Roact-Router with example pages
+local function TestNavbar()
+    return Roact.createElement(RoactRouter.RouterContext.Consumer, {
+        render = function(context)
+            local history = context.history
+
+            return Roact.createElement('Frame', {
+                Size = UDim2.new(1, 0, 0, 30),
+                BackgroundTransparency = 1
+            }, {
+                Home = Roact.createElement('TextButton', {
+                    Text = '/',
+                    TextSize = 18,
+                    Size = UDim2.new(0, 30, 0, 30),
+                    BackgroundColor3 = Color3.new(1, 1, 1),
+                    LayoutOrder = 1,
+
+                    [Roact.Event.Activated] = function()
+                        history:push('/')
+                    end
+                }),
+
+                ToTestIcon = Roact.createElement('TextButton', {
+                    Text = '/icon',
+                    TextSize = 18,
+                    Size = UDim2.new(0, 30, 0, 30),
+                    BackgroundColor3 = Color3.new(1, 1, 1),
+                    LayoutOrder = 2,
+
+                    [Roact.Event.Activated] = function()
+                        history:push('/icon')
+                    end
+                }),
+        
+                Layout = Roact.createElement('UIListLayout', {
+                    FillDirection = Enum.FillDirection.Horizontal,
+                    SortOrder = Enum.SortOrder.LayoutOrder
+                })
+            })
+        end
+    })
+end
+
+local function TestMainMenu()
+    return Roact.createElement(RoactRouter.Route, {
+        path = '/',
+        exact = true,
+        render = function(routeProps)
+            return TestUIComponents.TestArsenalPage()
+        end
+    })
+end
+
+local function TestIcon()
+    return Roact.createElement(RoactRouter.Route, {
+        path = '/icon',
+        exact = true,
+        render = function(routeProps)
+            return Roact.createElement(Icon, {
+                Padding = {
+                    PaddingLeft = UDim.new(0, 20),
+                    PaddingTop = UDim.new(0, 40),
+                    PaddingRight = UDim.new(0, 20),
+                    PaddingBottom = UDim.new(0, 40),
+                },
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Position = UDim2.new(0.5, 0, 0.5, 0),
+                Size = UDim2.new(0, 220, 0, 160),
+                Image = 'rbxassetid://13384578429',
+                ScaleType = Enum.ScaleType.Crop,
+                Event = {
+                    MouseEnter = function() print('Mouse Entered') end,
+                    MouseLeave = function() print('Mouse Left') end,
+                },
+            })
+        end
+    })
+end
+
+local _routerHistory
+local GuiRootWithRouter = Roact.createElement(RoactRouter.Router, nil, {
+    GuiScreen = Roact.createElement('ScreenGui', {
+        IgnoreGuiInset = true,
+        ZIndexBehavior = Enum.ZIndexBehavior.Sibling, -- Otherwise it is default to 'Global'
+    }, {
+        TestNavBar = Roact.createElement(TestNavbar),
+        RootBox = Roact.createElement(Box, {
+            Size = UDim2.new(1, 0, 1, 0),
+        }, {
+            Roact.createElement(TestMainMenu),
+            Roact.createElement(TestIcon),
+            -- Layout = Roact.createElement('UIListLayout', {
+            --     HorizontalAlignment = Enum.HorizontalAlignment.Center,
+            --     VerticalAlignment = Enum.VerticalAlignment.Center,
+            --     FillDirection = Enum.FillDirection.Vertical,
+            --     SortOrder = Enum.SortOrder.LayoutOrder,
+            --     Padding = UDim.new(0, 10)
+            -- })
+        })
+    })
+})
 
 local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
     IgnoreGuiInset = true,
@@ -166,7 +269,8 @@ local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
 })
 
 -- local guiUnmountHandler = Roact.mount(GuiRoot, Players.LocalPlayer.PlayerGui, 'Test GUI')
-local guiUnmountHandler = Roact.mount(GuiRootWithStoreHelpers, Players.LocalPlayer.PlayerGui, 'Test GUI')
+local guiUnmountHandler = Roact.mount(GuiRootWithRouter, Players.LocalPlayer.PlayerGui, 'Test GUI')
+-- local guiUnmountHandler = Roact.mount(GuiRootWithStoreHelpers, Players.LocalPlayer.PlayerGui, 'Test GUI')
 
 task.wait(1000)
 print('Unmounting GUI')
