@@ -27,6 +27,7 @@ local Icon = require(Components.Icon)
 local Card = require(Components.Card)
 local GridContainer = require(ReplicatedStorage.Shared.Components.GridContainer)
 local TestUIComponents = require(ReplicatedStorage.TestUIComponents)
+local AnomalyComponents = require(ReplicatedStorage.AnomalyComponents.misc)
 
 -- Test for Static Menus
 local GuiRoot = Roact.createElement('ScreenGui', {
@@ -83,12 +84,22 @@ local function TestNavbar()
     })
 end
 
-local function TestMainMenu()
+local function EntryMenu()
     return Roact.createElement(RoactRouter.Route, {
         path = '/',
         exact = true,
         render = function(routeProps)
-            return TestUIComponents.TestArsenalPage()
+            return AnomalyComponents.EntryMenu(routeProps)
+        end
+    })
+end
+
+local function PlayMenu()
+    return Roact.createElement(RoactRouter.Route, {
+        path = '/play',
+        exact = true,
+        render = function(routeProps)
+            return AnomalyComponents.PlayMenu(routeProps)
         end
     })
 end
@@ -129,7 +140,8 @@ local GuiRootWithRouter = Roact.createElement(RoactRouter.Router, nil, {
         RootBox = Roact.createElement(Box, {
             Size = UDim2.new(1, 0, 1, 0),
         }, {
-            Roact.createElement(TestMainMenu),
+            Roact.createElement(EntryMenu),
+            Roact.createElement(PlayMenu),
             Roact.createElement(TestIcon),
             -- Layout = Roact.createElement('UIListLayout', {
             --     HorizontalAlignment = Enum.HorizontalAlignment.Center,
@@ -271,6 +283,12 @@ local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
 -- local guiUnmountHandler = Roact.mount(GuiRoot, Players.LocalPlayer.PlayerGui, 'Test GUI')
 local guiUnmountHandler = Roact.mount(GuiRootWithRouter, Players.LocalPlayer.PlayerGui, 'Test GUI')
 -- local guiUnmountHandler = Roact.mount(GuiRootWithStoreHelpers, Players.LocalPlayer.PlayerGui, 'Test GUI')
+
+-- coroutine.wrap(function()
+--     task.wait(5)
+--     print('Jump to "Play Menu"')
+
+-- end)()
 
 task.wait(1000)
 print('Unmounting GUI')
