@@ -104,6 +104,36 @@ local function PlayMenu()
     })
 end
 
+local function ArsenalPanel()
+    return Roact.createElement(RoactRouter.Route, {
+        path = '/arsenal',
+        exact = true,
+        render = function(routeProps)
+            return AnomalyComponents.ArsenalPanel(routeProps)
+        end
+    })
+end
+
+local function LevelPanel()
+    return Roact.createElement(RoactRouter.Route, {
+        path = '/play/level',
+        exact = true,
+        render = function(routeProps)
+            return AnomalyComponents.LevelPanel(routeProps)
+        end
+    })
+end
+
+local function DescPanel()
+    return Roact.createElement(RoactRouter.Route, {
+        path = '/itemDetail',
+        exact = true,
+        render = function(routeProps)
+            return AnomalyComponents.DescPanel(routeProps)
+        end
+    })
+end
+
 local function TestIcon()
     return Roact.createElement(RoactRouter.Route, {
         path = '/icon',
@@ -142,6 +172,9 @@ local GuiRootWithRouter = Roact.createElement(RoactRouter.Router, nil, {
         }, {
             Roact.createElement(EntryMenu),
             Roact.createElement(PlayMenu),
+            Roact.createElement(ArsenalPanel),
+            Roact.createElement(LevelPanel),
+            Roact.createElement(DescPanel),
             Roact.createElement(TestIcon),
             -- Layout = Roact.createElement('UIListLayout', {
             --     HorizontalAlignment = Enum.HorizontalAlignment.Center,

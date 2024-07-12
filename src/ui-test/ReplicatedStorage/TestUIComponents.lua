@@ -314,8 +314,6 @@ function TestLevelPage()
 end
 
 -- Description Popup/Page
--- [TODO] Move to another file
-
 local function TestStatItem()
     return Roact.createElement(Box, {
         Size = UDim2.new(1/3, 0, 0, 60),
