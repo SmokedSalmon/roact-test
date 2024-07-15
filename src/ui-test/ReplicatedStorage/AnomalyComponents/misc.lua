@@ -18,6 +18,7 @@ local ItemCard = require(script.Parent.ItemCard)
 local ShadowedSign = require(script.Parent.ShadowedSign)
 local PanelTabButton = require(script.Parent.PanelTabButton)
 local StatItem = require(script.Parent.StatItem)
+local DescGallery = require(script.Parent.DescGallery)
 local ListContainer = require(AtomicComponents.ListContainer)
 local Box = require(AtomicComponents.Box)
 
@@ -140,9 +141,18 @@ function LevelPanel()
                 FillDirection = Enum.FillDirection.Vertical,
                 HorizontalAlignment = Enum.HorizontalAlignment.Center,
             }),
-            Button1 = PanelTabButton({ Text = 'Basics' }),
-            Button2 = PanelTabButton({ Text = 'Block Them Up' }),
-            Button3 = PanelTabButton({ Text = 'Combos, Tech-up' }),
+            Button1 = PanelTabButton({
+                Button = { Text = 'Basics' },
+                Square = { BackgroundColor3 = Color3.fromRGB(115, 253, 255) },
+            }),
+            Button2 = PanelTabButton({
+                Button = { Text = 'Block Them Up' },
+                Square = { BackgroundColor3 = Color3.fromRGB(212, 251, 121) },
+            }),
+            Button3 = PanelTabButton({
+                Button = { Text = 'Combos, Tech-up' },
+                Square = { BackgroundColor3 = Color3.fromRGB(255, 212, 121) },
+            }),
         }),
         -- Row/Column Container
         Container1 = Roact.createElement(RowContainer, {
@@ -241,9 +251,18 @@ function ArsenalPanel(routeProps)
                 FillDirection = Enum.FillDirection.Vertical,
                 HorizontalAlignment = Enum.HorizontalAlignment.Center,
             }),
-            Button1 = PanelTabButton({ Text = 'Towers' }),
-            Button2 = PanelTabButton({ Text = 'Upgrades' }),
-            Button3 = PanelTabButton({ Text = 'Accessories' }),
+            Button1 = PanelTabButton({
+                Button = { Text = 'Towers' },
+                Square = { BackgroundColor3 = Color3.fromRGB(115, 253, 255) },
+            }),
+            Button2 = PanelTabButton({
+                Button = { Text = 'Upgrades' },
+                Square = { BackgroundColor3 = Color3.fromRGB(212, 251, 121) },
+            }),
+            Button3 = PanelTabButton({
+                Button = { Text = 'Accessories' },
+                Square = { BackgroundColor3 = Color3.fromRGB(255, 212, 121) },
+            }),
         }),
         -- Test Grid Container
         Container1 = Roact.createElement(GridContainer, {
@@ -368,7 +387,26 @@ function DescPanel()
                     })
                 }),
             }),
-        })
+        }),
+        RightPanel = Roact.createElement(DescGallery, {
+            Position = UDim2.new(0.5, 0, 0, 0),
+            Size = UDim2.new(0.5, 0, 1, 0),
+            Image1 = {
+                FramePadding = {
+                    PaddingLeft = UDim.new(0, 10),
+                    PaddingTop = UDim.new(0, 10),
+                    PaddingRight = UDim.new(0, 10),
+                    PaddingBottom = UDim.new(0, 50),
+                },
+                Background = {
+                    Color3 = Color3.fromRGB(118, 214, 255),
+                },
+                Shadow = {
+                    Color3 = Color3.fromRGB(0, 84, 147),
+                },
+                Image = 'rbxasset://textures/ui/GuiImagePlaceholder.png',
+            },
+        }),
     })
 end
 
