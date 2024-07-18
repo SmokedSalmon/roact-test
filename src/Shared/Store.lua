@@ -3,18 +3,17 @@
 ]]
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Roact = require(ReplicatedStorage.Packages.roact)
+local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
 type StoreType = {
-    actions: {},
-    ProvideFor: ({Roact.Component}) -> Roact.Component,
-    asConsumer: (Roact.Component, ((state: any) -> any)?) -> Roact.Component,
+    Provider: Roact.Component,
+    Consumer: Roact.Component,
 }
 
-local function createStore(defaultValue: any, name: string?): StoreType
-    local _context = Roact.createContext(defaultValue)
-    local _name = name or 'Store'
-    local Provider = Roact.PureComponent:extend(`{_name}Provider`)
+local function createStore(initState: any): StoreType
+    local _context = Roact.createContext(initState or {})
+    local Provider = Roact.PureComponent:extend('StoreProvider')
     function Provider:init()
-        self:setState(defaultValue)
+        self:setState(initState)
     end
 
     function Provider:render()
@@ -25,33 +24,36 @@ local function createStore(defaultValue: any, name: string?): StoreType
 
     local actions = {} -- [TODO]
 
-    local function asConsumer(
-        ConsumerComponent: Roact.Component | string,
-        storeToPropFunc: ((state: any) -> any)?
-    ): Roact.Component
-        local _getProp = storeToPropFunc or function(state: any) return state end
-        return Roact.createElement(_context.Consumer, {
-            render = function(store)
-                return Roact.createElement(ConsumerComponent, _getProp(store))
-            end,
-        })
-    end
-
     return {
         actions = actions,
-        ProvideFor = function(children: {Roact.Component}?)
-            return Roact.createElement(Provider, {}, children)
-        end,
-        asConsumer = asConsumer,
+        Provider = Provider,
+        Consumer = _context.Consumer,
         Context = _context,
     }
 end
 
-local GlobalStore = createStore({}, 'GlobalStore')
+function WithStore(Component: Roact.Component, Store: StoreType, mapStateToProps: any, mapDispatchFunc: any)
+    if not mapStateToProps then
+        mapStateToProps = function(state) return state end
+    end
+    if not mapDispatchFunc then
+        mapDispatchFunc = function() return {} end
+    end
+    
+    return function (props: {}?)
+        return Roact.createElement(Store.Consumer, {
+            render = function(state)
+                local _props = TableUtil.Assign(props or {}, mapStateToProps(state))
+                _props = TableUtil.Assign(_props, mapDispatchFunc(state))
+                return Roact.createElement(Component, _props)
+            end
+        })
+    end
+end
 
-local StoreService = {
-    GlobalStore = GlobalStore,
+local StoreModule = {
     createStore = createStore,
+    WithStore = WithStore,
 }
 
-return StoreService
+return StoreModule

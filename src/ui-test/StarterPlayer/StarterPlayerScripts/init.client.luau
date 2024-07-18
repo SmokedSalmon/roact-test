@@ -16,7 +16,7 @@ local RoactRouter = require(ReplicatedStorage.Packages['roact-router'])
 
 local Components = ReplicatedStorage.Shared.Components
 local AtomicComponents = Components.Atomic
-local StoreService = require(ReplicatedStorage.Shared.Store)
+local Store = require(ReplicatedStorage.Shared.Store)
 local Modal = require(Components.Modal)
 local WithCustomBackground = require(AtomicComponents.WithCustomBackground)
 local Box = require(AtomicComponents.Box)
@@ -39,7 +39,7 @@ local GuiRoot = Roact.createElement('ScreenGui', {
 
 -- Test for Store Helpers
 local defaultValue = { Scope1 = { Text = 'Passed Down' } }
-local GlobalStore = StoreService.createStore(defaultValue, 'UIStore')
+local GlobalStore = Store.createStore(defaultValue)
 
 -- Test for Roact-Router with example pages
 local function TestNavbar()
@@ -160,7 +160,6 @@ local function TestIcon()
     })
 end
 
-local _routerHistory
 local GuiRootWithRouter = Roact.createElement(RoactRouter.Router, nil, {
     GuiScreen = Roact.createElement('ScreenGui', {
         IgnoreGuiInset = true,
@@ -187,11 +186,18 @@ local GuiRootWithRouter = Roact.createElement(RoactRouter.Router, nil, {
     })
 })
 
-local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
+local function TestStoreTextLabel(props)
+    local text1 = props.Scope1 and props.Scope1.Text or 'Default Text'
+    local text2 = props.ExtraText or ''
+    local text = `{text1} | {text2}`
+    return Roact.createElement('TextLabel', { Text = text })
+end
+
+local GuiRootToTestStore = Roact.createElement('ScreenGui', {
     IgnoreGuiInset = true,
     ZIndexBehavior = Enum.ZIndexBehavior.Sibling, -- Otherwise it is default to 'Global'
 }, {
-    Root = GlobalStore.ProvideFor({
+    StoreRoot = Roact.createElement(GlobalStore.Provider, {}, {
         TestContainer = Roact.createElement(Box, {
             AnchorPoint = Vector2.new(0.5, 0.5),
             Position = UDim2.new(0.5, 0, 0.5, 0),
@@ -265,46 +271,52 @@ local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
             -- }),
 
             -- Test Mixed Button
-            TestMixedButton = Roact.createElement(MixedButton, {
-                Padding = {
-                    PaddingLeft = UDim.new(0, 10),
-                    PaddingTop = UDim.new(0, 5),
-                    PaddingRight = UDim.new(0, 10),
-                    PaddingBottom = UDim.new(0, 5),
-                },
-                Background = {
-                    Color3 = Color3.fromRGB(0, 249, 0),
-                    CornerRadius = UDim.new(0, 10),
-                },
-                Shadow = {
-                    Color3 = Color3.fromRGB(0, 144, 81),
-                },
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Position = UDim2.new(0.5, 0, 0.5, 0),
-                Size = UDim2.new(0, 150, 0, 60),
-                Button = {
-                    Size = UDim2.new(0.65, 0, 0.2, 0),
-                    Text = 'Click Me',
-                    FontFace = Font.new('rbxasset://fonts/families/JosefinSans.json'),
-                    TextSize = 18,
-                    TextXAlignment = Enum.TextXAlignment.Right,
-                    TextYAlignment = Enum.TextYAlignment.Center,
-                    Icon = {
-                        Size = UDim2.new(0.2, 0, 0.2, 0),
-                        SizeConstraint = Enum.SizeConstraint.RelativeXX,
-                        Image = 'rbxassetid://13384578429',
-                        ScaleType = Enum.ScaleType.Crop,
-                    }
-                }
+            -- TestMixedButton = Roact.createElement(MixedButton, {
+            --     Padding = {
+            --         PaddingLeft = UDim.new(0, 10),
+            --         PaddingTop = UDim.new(0, 5),
+            --         PaddingRight = UDim.new(0, 10),
+            --         PaddingBottom = UDim.new(0, 5),
+            --     },
+            --     Background = {
+            --         Color3 = Color3.fromRGB(0, 249, 0),
+            --         CornerRadius = UDim.new(0, 10),
+            --     },
+            --     Shadow = {
+            --         Color3 = Color3.fromRGB(0, 144, 81),
+            --     },
+            --     AnchorPoint = Vector2.new(0.5, 0.5),
+            --     Position = UDim2.new(0.5, 0, 0.5, 0),
+            --     Size = UDim2.new(0, 150, 0, 60),
+            --     Button = {
+            --         Size = UDim2.new(0.65, 0, 0.2, 0),
+            --         Text = 'Click Me',
+            --         FontFace = Font.new('rbxasset://fonts/families/JosefinSans.json'),
+            --         TextSize = 18,
+            --         TextXAlignment = Enum.TextXAlignment.Right,
+            --         TextYAlignment = Enum.TextYAlignment.Center,
+            --         Icon = {
+            --             Size = UDim2.new(0.2, 0, 0.2, 0),
+            --             SizeConstraint = Enum.SizeConstraint.RelativeXX,
+            --             Image = 'rbxassetid://13384578429',
+            --             ScaleType = Enum.ScaleType.Crop,
+            --         }
+            --     }
 
-                -- Event = {
-                --     MouseEnter = function() print('Mouse Entered') end,
-                --     MouseLeave = function() print('Mouse Left') end,
-                -- },
-            })
+            --     -- Event = {
+            --     --     MouseEnter = function() print('Mouse Entered') end,
+            --     --     MouseLeave = function() print('Mouse Left') end,
+            --     -- },
+            -- })
 
             -- Test A single Card
             -- Card1 = Roact.createElement(Card, {}),
+
+            -- Test Store
+            TestText = Roact.createElement(
+                Store.WithStore(TestStoreTextLabel, GlobalStore),
+                { ExtraText = 'Some Extra Text' }
+            )
         })
         
         -- ArsenalPage = TestUIComponents.TestArsenalPage(),
@@ -314,8 +326,8 @@ local GuiRootWithStoreHelpers = Roact.createElement('ScreenGui', {
 })
 
 -- local guiUnmountHandler = Roact.mount(GuiRoot, Players.LocalPlayer.PlayerGui, 'Test GUI')
-local guiUnmountHandler = Roact.mount(GuiRootWithRouter, Players.LocalPlayer.PlayerGui, 'Test GUI')
--- local guiUnmountHandler = Roact.mount(GuiRootWithStoreHelpers, Players.LocalPlayer.PlayerGui, 'Test GUI')
+-- local guiUnmountHandler = Roact.mount(GuiRootWithRouter, Players.LocalPlayer.PlayerGui, 'Test GUI')
+local guiUnmountHandler = Roact.mount(GuiRootToTestStore, Players.LocalPlayer.PlayerGui, 'Test GUI')
 
 -- coroutine.wrap(function()
 --     task.wait(5)
