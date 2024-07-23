@@ -29,6 +29,7 @@ function PanelTabButton(props: {}?)
     return Roact.createElement(ColorSquareButton, {
         Button = _buttonProps,
         Square = _squareProps,
+        Event = _props.Event,
         Size = UDim2.new(1, 0, 0, 60)
     })
 end

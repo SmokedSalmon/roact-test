@@ -21,10 +21,8 @@
 
     "StarterPlayer": {
       "StarterPlayerScripts": {
-        "Client": {
-          "$path": "src/ui-test/StarterPlayer/StarterPlayerScripts",
-          "$ignoreUnknownInstances": true
-        }
+        "$path": "src/ui-test/StarterPlayer/StarterPlayerScripts",
+        "$ignoreUnknownInstances": true
       }
     }
   }

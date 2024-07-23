@@ -111,7 +111,10 @@ function PlayMenu(routeProps)
     })
 end
 
-function LevelPanel()
+function LevelPanel(props: {}?)
+    local _props = TableUtil.Assign({}, props)
+    local refresh = _props.refresh or function() end
+
     return Roact.createElement(Box, {
         AnchorPoint = Vector2.new(0.5, 0.5),
         Position = UDim2.new(0.5, 0, 0.5, 0),
@@ -152,6 +155,13 @@ function LevelPanel()
             Button3 = PanelTabButton({
                 Button = { Text = 'Combos, Tech-up' },
                 Square = { BackgroundColor3 = Color3.fromRGB(255, 212, 121) },
+            }),
+            Button4 = PanelTabButton({
+                Button = { Text = 'Test Refresh' },
+                Square = { BackgroundColor3 = Color3.fromRGB(208, 31, 190) },
+                Event = {
+                    Activated = refresh
+                }
             }),
         }),
         -- Row/Column Container

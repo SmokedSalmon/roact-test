@@ -17,6 +17,7 @@ local RoactRouter = require(ReplicatedStorage.Packages['roact-router'])
 local Components = ReplicatedStorage.Shared.Components
 local AtomicComponents = Components.Atomic
 local Store = require(ReplicatedStorage.Shared.Store)
+local UIState = require(script.Parent.UIState)
 local Modal = require(Components.Modal)
 local WithCustomBackground = require(AtomicComponents.WithCustomBackground)
 local Box = require(AtomicComponents.Box)
@@ -39,7 +40,6 @@ local GuiRoot = Roact.createElement('ScreenGui', {
 
 -- Test for Store Helpers
 local defaultValue = { Scope1 = { Text = 'Passed Down' } }
-local GlobalStore = Store.createStore(defaultValue)
 
 -- Test for Roact-Router with example pages
 local function TestNavbar()
@@ -114,12 +114,21 @@ local function ArsenalPanel()
     })
 end
 
+local LevelPanelWithUIState = UIState.WithUIState(
+    AnomalyComponents.LevelPanel,
+    nil,
+    function(dispatch)
+        return {
+            refresh = function() dispatch('reducer_test') end
+        }
+    end
+)
 local function LevelPanel()
     return Roact.createElement(RoactRouter.Route, {
         path = '/play/level',
         exact = true,
         render = function(routeProps)
-            return AnomalyComponents.LevelPanel(routeProps)
+            return LevelPanelWithUIState(routeProps)
         end
     })
 end
@@ -165,23 +174,27 @@ local GuiRootWithRouter = Roact.createElement(RoactRouter.Router, nil, {
         IgnoreGuiInset = true,
         ZIndexBehavior = Enum.ZIndexBehavior.Sibling, -- Otherwise it is default to 'Global'
     }, {
-        TestNavBar = Roact.createElement(TestNavbar),
-        RootBox = Roact.createElement(Box, {
-            Size = UDim2.new(1, 0, 1, 0),
-        }, {
-            Roact.createElement(EntryMenu),
-            Roact.createElement(PlayMenu),
-            Roact.createElement(ArsenalPanel),
-            Roact.createElement(LevelPanel),
-            Roact.createElement(DescPanel),
-            Roact.createElement(TestIcon),
-            -- Layout = Roact.createElement('UIListLayout', {
-            --     HorizontalAlignment = Enum.HorizontalAlignment.Center,
-            --     VerticalAlignment = Enum.VerticalAlignment.Center,
-            --     FillDirection = Enum.FillDirection.Vertical,
-            --     SortOrder = Enum.SortOrder.LayoutOrder,
-            --     Padding = UDim.new(0, 10)
-            -- })
+        StoreRoot = Roact.createElement(UIState.Store.Provider, {}, {
+            Roact.createFragment({
+                TestNavBar = Roact.createElement(TestNavbar),
+                RootBox = Roact.createElement(Box, {
+                    Size = UDim2.new(1, 0, 1, 0),
+                }, {
+                    Roact.createElement(EntryMenu),
+                    Roact.createElement(PlayMenu),
+                    Roact.createElement(ArsenalPanel),
+                    Roact.createElement(LevelPanel),
+                    Roact.createElement(DescPanel),
+                    Roact.createElement(TestIcon),
+                    -- Layout = Roact.createElement('UIListLayout', {
+                    --     HorizontalAlignment = Enum.HorizontalAlignment.Center,
+                    --     VerticalAlignment = Enum.VerticalAlignment.Center,
+                    --     FillDirection = Enum.FillDirection.Vertical,
+                    --     SortOrder = Enum.SortOrder.LayoutOrder,
+                    --     Padding = UDim.new(0, 10)
+                    -- })
+                })
+            })
         })
     })
 })
@@ -197,7 +210,7 @@ local GuiRootToTestStore = Roact.createElement('ScreenGui', {
     IgnoreGuiInset = true,
     ZIndexBehavior = Enum.ZIndexBehavior.Sibling, -- Otherwise it is default to 'Global'
 }, {
-    StoreRoot = Roact.createElement(GlobalStore.Provider, {}, {
+    StoreRoot = Roact.createElement(UIState.Store.Provider, {}, {
         TestContainer = Roact.createElement(Box, {
             AnchorPoint = Vector2.new(0.5, 0.5),
             Position = UDim2.new(0.5, 0, 0.5, 0),
@@ -314,7 +327,7 @@ local GuiRootToTestStore = Roact.createElement('ScreenGui', {
 
             -- Test Store
             TestText = Roact.createElement(
-                Store.WithStore(TestStoreTextLabel, GlobalStore),
+                Store.WithStore(TestStoreTextLabel, UIState),
                 { ExtraText = 'Some Extra Text' }
             )
         })
@@ -326,8 +339,8 @@ local GuiRootToTestStore = Roact.createElement('ScreenGui', {
 })
 
 -- local guiUnmountHandler = Roact.mount(GuiRoot, Players.LocalPlayer.PlayerGui, 'Test GUI')
--- local guiUnmountHandler = Roact.mount(GuiRootWithRouter, Players.LocalPlayer.PlayerGui, 'Test GUI')
-local guiUnmountHandler = Roact.mount(GuiRootToTestStore, Players.LocalPlayer.PlayerGui, 'Test GUI')
+local guiUnmountHandler = Roact.mount(GuiRootWithRouter, Players.LocalPlayer.PlayerGui, 'Test GUI')
+-- local guiUnmountHandler = Roact.mount(GuiRootToTestStore, Players.LocalPlayer.PlayerGui, 'Test GUI')
 
 -- coroutine.wrap(function()
 --     task.wait(5)
