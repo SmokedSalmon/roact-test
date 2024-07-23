@@ -29,14 +29,13 @@ local DefaultShadowOffset = UDim2.new(0, 3, 0, 3)
 local DefaultFrameProps = {
     Position = UDim2.new(0, 0, 0, 0),
     Size = UDim2.new(0, 100, 0, 100),
-}
--- The follow properties are rendered by the __BG, __Shadow, __Border Frames
--- Since we have to cater Shadow, background is facilitated with a child frame named BG. Otherwise the Shadow will be over root container's own Background
--- Therefore the root Frame are transparent to let them manifest
-local RootFramePropsOverride = {
+    -- The follow properties are rendered by the __BG, __Shadow, __Border Frames, unless you specifically set it
+    -- Since we have to cater Shadow, background is facilitated with a child frame named BG. Otherwise the Shadow will be over root container's own Background
+    -- Therefore the root Frame are transparent to let them manifest
     BackgroundTransparency = 1,
     BorderSizePixel = 0,
 }
+
 local DefaultBGProps = {
     Position = UDim2.new(0, 0, 0, 0),
     Size = UDim2.new(1, 0, 1, 0),
@@ -209,7 +208,6 @@ function Box:render()
         _children.__BG = Roact.createElement('Frame', _bgProps)
     end
     _props[Roact.Children] = _children
-    _props = TableUtil.Assign(_props, RootFramePropsOverride) -- Remove all properties that are NOT related to the root frame
     return _scroll
         and Roact.createElement('ScrollingFrame', _props)
         or Roact.createElement('Frame', _props)

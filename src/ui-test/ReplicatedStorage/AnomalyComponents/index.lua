@@ -111,124 +111,6 @@ function PlayMenu(routeProps)
     })
 end
 
-function LevelPanel(props: {}?)
-    local _props = TableUtil.Assign({}, props)
-    local refresh = _props.refresh or function() end
-
-    return Roact.createElement(Box, {
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        Position = UDim2.new(0.5, 0, 0.5, 0),
-        Size = UDim2.new(0.7, 0, 0.7, 0),
-        Background = {
-            Color3 = Color3.fromRGB(118, 214, 255),
-            CornerRadius = UDim.new(0, 5),
-        },
-        Shadow = {
-            Color3 = Color3.fromRGB(0, 84, 147),
-            Offset = UDim2.new(0, 5, 0, 5)
-        }
-    }, {
-        -- Panel Sign
-        SignLabel = Roact.createElement(ShadowedSign, {
-            Text = 'Select Level',
-            TextSize = 50,
-            Color = Color3.fromRGB(255, 255, 255),
-            ShadowColor = Color3.fromRGB(115, 250, 121),
-        }),
-        -- Left Tab
-        LeftTab = Roact.createElement(Box, {
-            Position = UDim2.new(-0.15, 0, 0.2, 0),
-            Size = UDim2.new(0.3, 0.85),
-        }, {
-            UIListLayout = Roact.createElement('UIListLayout', {
-                FillDirection = Enum.FillDirection.Vertical,
-                HorizontalAlignment = Enum.HorizontalAlignment.Center,
-            }),
-            Button1 = PanelTabButton({
-                Button = { Text = 'Basics' },
-                Square = { BackgroundColor3 = Color3.fromRGB(115, 253, 255) },
-            }),
-            Button2 = PanelTabButton({
-                Button = { Text = 'Block Them Up' },
-                Square = { BackgroundColor3 = Color3.fromRGB(212, 251, 121) },
-            }),
-            Button3 = PanelTabButton({
-                Button = { Text = 'Combos, Tech-up' },
-                Square = { BackgroundColor3 = Color3.fromRGB(255, 212, 121) },
-            }),
-            Button4 = PanelTabButton({
-                Button = { Text = 'Test Refresh' },
-                Square = { BackgroundColor3 = Color3.fromRGB(208, 31, 190) },
-                Event = {
-                    Activated = refresh
-                }
-            }),
-        }),
-        -- Row/Column Container
-        Container1 = Roact.createElement(RowContainer, {
-            Position = UDim2.new(0.1, 0, 0.15, 0),
-            Size = UDim2.new(0.9, 0, 0.85, 0),
-            List = {
-                Padding = UDim.new(0, 10),
-            }
-        }, {
-            Row1 = Roact.createElement(Box, {
-                AutomaticSize = Enum.AutomaticSize.Y,
-                Size = UDim2.new(1, 0, 0, 0),
-            }, {
-                ChapterDesc = Roact.createElement('TextLabel', {
-                    BackgroundTransparency = 1,
-                    AutomaticSize = Enum.AutomaticSize.Y,
-                    Size = UDim2.new(1, 0, 0, 0),
-                    Text = 'Integer ante lorem, placerat eu pellentesque non, scelerisque ac libero. Pellentesque ultrices a tortor vitae pharetra. Mauris posuere ipsum ipsum, vel interdum eros malesuada id. Sed rutrum at ligula a vulputate. Aliquam in placerat orci. platea dictumst.',
-                    FontFace = Font.fromName('SourceSansPro'),
-                    TextSize = 14,
-                    TextXAlignment = Enum.TextXAlignment.Left,
-                    TextYAlignment = Enum.TextYAlignment.Top,
-                    TextWrapped = true,
-                })
-            }),
-            Row2 = Roact.createElement(ColumnContainer, {
-                AutomaticSize = Enum.AutomaticSize.Y,
-                Size = UDim2.new(1, 0, 0, 0),
-                Scroll = false,
-            }, {
-                Card1 = LevelCard(),
-                Card2 = LevelCard(),
-                Card3 = LevelCard(),
-                Card4 = LevelCard(),
-            }),
-            Row3 = Roact.createElement(ColumnContainer, {
-                AutomaticSize = Enum.AutomaticSize.Y,
-                Size = UDim2.new(1, 0, 0, 0),
-                Scroll = false,
-            }, {
-                Card1 = LevelCard(),
-                Card2 = LevelCard(),
-                Card3 = LevelCard(),
-            }),
-            Row4 = Roact.createElement(ColumnContainer, {
-                AutomaticSize = Enum.AutomaticSize.Y,
-                Size = UDim2.new(1, 0, 0, 0),
-                Scroll = false,
-            }, {
-                Card1 = LevelCard(),
-                Card2 = LevelCard(),
-                Card3 = LevelCard(),
-            }),
-            Row5 = Roact.createElement(ColumnContainer, {
-                AutomaticSize = Enum.AutomaticSize.Y,
-                Size = UDim2.new(1, 0, 0, 0),
-                Scroll = false,
-            }, {
-                Card1 = LevelCard(),
-                Card2 = LevelCard(),
-                Card3 = LevelCard(),
-            }),
-        })
-    })
-end
-
 function ArsenalPanel(routeProps)
     local history = routeProps.history
     return Roact.createElement(Box, {
@@ -313,18 +195,6 @@ function ArsenalPanel(routeProps)
                 Activated = function() history:push('/itemDetail') end
             }}),
         })
-    })
-end
-
-function LevelCard()
-    return ItemCard({
-        Size = UDim2.new(0, 160, 0, 100 ),
-        Padding = {
-            PaddingLeft = UDim.new(0, 10),
-            PaddingTop = UDim.new(0, 10),
-            PaddingRight = UDim.new(0, 10),
-            PaddingBottom = UDim.new(0, 10),
-        }
     })
 end
 
@@ -424,6 +294,6 @@ return {
     EntryMenu = EntryMenu,
     PlayMenu = PlayMenu,
     ArsenalPanel = ArsenalPanel,
-    LevelPanel = LevelPanel,
+    SelectLevelPanel = require(script.Parent.SelectLevelPanel),
     DescPanel = DescPanel,
 }

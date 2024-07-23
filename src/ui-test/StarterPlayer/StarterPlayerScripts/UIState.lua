@@ -2,6 +2,7 @@ local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
 local Store = require(ReplicatedStorage.Shared.Store)
 
+-- Player Level Progress
 export type ProgressType = {
     [string]: number,
 }
@@ -9,10 +10,9 @@ export type UIStateType = {
     progress: ProgressType
 }
 
-export type ActionType = (actionName: string, payload: any) -> any
-
 -- === Progress Related ===
 type ChapterType = { id: string, name: string, levels: number, next: string? }
+-- [TODO] move to Constants or configs
 local _ChapterDefs = {
     Chapter1 = { id = 'Chapter1', name = 'Chapter 1', levels = 7, next = 'Chapter2' },
     Chapter2 = { id = 'Chapter2', name = 'Chapter 2', levels = 3, next = nil },
@@ -21,7 +21,11 @@ local _ChapterDefs = {
 -- Reducer
 function Reducer(state: UIStateType, name: string, payload: any)
     if name == 'advance_progress' then
-        if not payload or not payload.chapter then
+        if not payload then
+            warn(`[{name}] Missing payload`)
+            return table.clone(state)
+        end
+        if not payload.chapter then
             warn(`[{name}] Invalid chapter - {payload.chapter and payload.chapter}`)
             return table.clone(state)
         end
@@ -65,10 +69,12 @@ function Reducer(state: UIStateType, name: string, payload: any)
     end
 end
 
+-- Create the Global UIState Store object
 local GlobalStore: UIStateType = Store.createStore({
     progress = { Chapter1 = 1, Chapter2 = 0 }
 }, Reducer)
 
+-- Quick helper/wrapper to make a Component access this Global UIState
 function WithUIState(Component: Roact.Component, mapStateToProps: any, mapDispatchToProps: any): Roact.Component
     return Store.WithStore(Component, GlobalStore, mapStateToProps, mapDispatchToProps)
 end

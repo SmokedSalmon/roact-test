@@ -28,7 +28,7 @@ local Icon = require(Components.Icon)
 local Card = require(Components.Card)
 local GridContainer = require(ReplicatedStorage.Shared.Components.GridContainer)
 local TestUIComponents = require(ReplicatedStorage.TestUIComponents)
-local AnomalyComponents = require(ReplicatedStorage.AnomalyComponents.misc)
+local AnomalyComponents = require(ReplicatedStorage.AnomalyComponents.index)
 
 -- Test for Static Menus
 local GuiRoot = Roact.createElement('ScreenGui', {
@@ -115,11 +115,12 @@ local function ArsenalPanel()
 end
 
 local LevelPanelWithUIState = UIState.WithUIState(
-    AnomalyComponents.LevelPanel,
+    AnomalyComponents.SelectLevelPanel,
     nil,
     function(dispatch)
         return {
-            refresh = function() dispatch('reducer_test') end
+            refresh = function() dispatch('reducer_test') end,
+            advanceChapter = function() dispatch('advance_progress', { chapter = 'Chapter1' }) end,
         }
     end
 )

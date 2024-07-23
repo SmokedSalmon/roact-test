@@ -1,6 +1,5 @@
 --[[
     Button Component
-    [TODO] Image Button
     [Deprecated] Use TButton Instead
 ]]
 local ReplicatedStorage = game:GetService('ReplicatedStorage')

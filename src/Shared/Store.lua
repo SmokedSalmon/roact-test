@@ -4,41 +4,40 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Roact = require(ReplicatedStorage.Packages.roact)
 local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
-type StoreType = {
+export type DispatchType = (string, {}?) -> nil
+export type StoreType = {
+    Context: { Provider: Roact.Component, Consumer: Roact.Component }, -- internal Roact.Context Object
     Provider: Roact.Component,
     Consumer: Roact.Component,
-    dispatch: (string, {any}?) -> nil,
 }
 
 local function createStore(initState: any, reducer: () -> ({})): StoreType
     local _context = Roact.createContext(initState or {})
+    -- Store manipulator
+    local _dispatch
+    -- Extend Roact.Context.Provider with Store features by injecting Store's reducer in it
     local Provider = Roact.PureComponent:extend('StoreProvider')
 
-    local actions = {} -- [TODO]
-
     function Provider:init()
-        local dispatch
         if reducer and typeof(reducer) == 'function' then
-            dispatch = function(name: string, payload: {any}?)
+            _dispatch = function(name: string, payload: {any}?)
                 local newState = reducer(self.state, name, payload)
                 self:setState(newState)
             end
         else
-            dispatch = function() end
+            _dispatch = function() end
         end
-        print(dispatch)
-        initState.dispatch = dispatch
         self:setState(initState)
     end
 
     function Provider:render()
         return Roact.createElement(_context.Provider, {
-            value = self.state
+            -- pass an array containing the getter and setter of the Store, similar to React's useReducer
+            value = { self.state, _dispatch }
         }, self.props[Roact.Children])
     end
 
     return {
-        actions = actions,
         Provider = Provider,
         Consumer = _context.Consumer,
         Context = _context,
@@ -56,10 +55,9 @@ function WithStore(Component: Roact.Component, Store: StoreType, mapStateToProps
     
     return function (props: {}?)
         return Roact.createElement(Store.Consumer, {
-            render = function(stateWithDispatch)
-                local dispatch = stateWithDispatch.dispatch
-                local _props = TableUtil.Assign(props or {}, mapStateToProps(stateWithDispatch))
-                _props.dispatch = nil
+            render = function(storeHandle)
+                local state, dispatch = unpack(storeHandle)
+                local _props = TableUtil.Assign(props or {}, mapStateToProps(state))
                 _props = TableUtil.Assign(_props, mapDispatchToProps(dispatch, props))
                 return Roact.createElement(Component, _props)
             end

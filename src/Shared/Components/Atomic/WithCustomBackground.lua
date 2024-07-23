@@ -4,6 +4,7 @@
     Use "props.bg" as the property object for Background
     It also populates an individual Frame as Shadow
     Use "props.bg.shadow" as the property object for Shadow
+    [Deprecated] Use Box Component with Background and Shadow property instead
 ]]
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Roact = require(ReplicatedStorage.Packages.roact)

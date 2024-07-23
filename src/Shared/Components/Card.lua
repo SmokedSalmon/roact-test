@@ -62,8 +62,8 @@ end
 --     return self.props ~= np or self.state ~= ns
 -- end
 
-function Card:didUpdate()
-    print(`Card updated`)
-end
+-- function Card:didUpdate()
+--     print(`Card updated`)
+-- end
 
 return Card
