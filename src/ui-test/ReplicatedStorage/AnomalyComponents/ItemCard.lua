@@ -15,7 +15,8 @@ local DefaultProps = {
         PaddingTop = UDim.new(0, 10),
         PaddingRight = UDim.new(0, 10),
         PaddingBottom = UDim.new(0, 10),
-    }
+    },
+    active = true,
 }
 
 local ItemCard = Roact.Component:extend('ItemCard')

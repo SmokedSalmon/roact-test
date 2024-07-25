@@ -9,13 +9,15 @@ local AtomicComponents = ReplicatedStorage.Shared.Components.Atomic
 local Box = require(AtomicComponents.Box)
 
 -- Constants & Configs
+local DefaultLayoutProps = {
+    SortOrder = Enum.SortOrder.LayoutOrder,
+    CellPadding = UDim2.new(0, 0, 0, 0),
+    CellSize = UDim2.new(1/3, 0, 1/3, 0), -- TODO Parameterized
+    FillDirection = Enum.FillDirection.Horizontal,
+}
 local DefaultRootContainerProps = {
     Position = UDim2.new(0, 0, 0, 0),
     Size = UDim2.new(1, 0, 1, 0),
-    -- [TODO] make this a Container Root Component
-    Background = {
-        Transparency = 1,
-    },
     BorderSizePixel = 0,
     AutomaticSize = Enum.AutomaticSize.None,
     -- Scrolling
@@ -38,13 +40,11 @@ local GridContainer = Roact.Component:extend('GridContainer')
 
 function GridContainer:render()
     local _props = TableUtil.Assign(DefaultRootContainerProps, self.props or {})
+    local _layoutProps = TableUtil.Assign(DefaultLayoutProps, _props.Layout)
+    _props.Layout = nil
 
     _props[Roact.Children] = TableUtil.Assign({
-        UIGridLayout = Roact.createElement('UIGridLayout', {
-            CellPadding = UDim2.new(0, 0, 0, 0),
-            CellSize = UDim2.new(1/3, 0, 1/3, 0), -- TODO Parameterized
-            FillDirection = Enum.FillDirection.Horizontal,
-        }, {}),
+        UIGridLayout = Roact.createElement('UIGridLayout', _layoutProps),
     }, _props[Roact.Children])
     
     return Roact.createElement(Box, _props)

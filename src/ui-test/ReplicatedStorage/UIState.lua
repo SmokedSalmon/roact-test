@@ -6,8 +6,16 @@ local Store = require(ReplicatedStorage.Shared.Store)
 export type ProgressType = {
     [string]: number,
 }
+export type GenericAssetRegistryType = { [number | string]: boolean }
+export type PlayerAssetType = {
+    towers: {GenericAssetRegistryType},
+    upgrades: {GenericAssetRegistryType},
+    accessories: {GenericAssetRegistryType},
+}
+
 export type UIStateType = {
-    progress: ProgressType
+    progress: ProgressType,
+    owned: PlayerAssetType,
 }
 
 -- === Progress Related ===
@@ -16,6 +24,24 @@ type ChapterType = { id: string, name: string, levels: number, next: string? }
 local _ChapterDefs = {
     Chapter1 = { id = 'Chapter1', name = 'Chapter 1', levels = 7, next = 'Chapter2' },
     Chapter2 = { id = 'Chapter2', name = 'Chapter 2', levels = 3, next = nil },
+}
+local _PlayerAssetDefs = {
+
+}
+local _InitState: UIStateType = {
+    progress = { Chapter1 = 1, Chapter2 = 0 },
+    owned = {
+        towers = {
+            [1] = true,
+            [2] = true,
+            [3] = false,
+            [4] = true,
+            [5] = false,
+            -- ...
+        },
+        upgrades = {},
+        accessories = {},
+    }
 }
 
 -- Reducer
@@ -70,9 +96,7 @@ function Reducer(state: UIStateType, name: string, payload: any)
 end
 
 -- Create the Global UIState Store object
-local GlobalStore: UIStateType = Store.createStore({
-    progress = { Chapter1 = 1, Chapter2 = 0 }
-}, Reducer)
+local GlobalStore: UIStateType = Store.createStore(_InitState, Reducer)
 
 -- Quick helper/wrapper to make a Component access this Global UIState
 function WithUIState(Component: Roact.Component, mapStateToProps: any, mapDispatchToProps: any): Roact.Component

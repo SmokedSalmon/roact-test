@@ -111,93 +111,6 @@ function PlayMenu(routeProps)
     })
 end
 
-function ArsenalPanel(routeProps)
-    local history = routeProps.history
-    return Roact.createElement(Box, {
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        Position = UDim2.new(0.5, 0, 0.5, 0),
-        Size = UDim2.new(0.7, 0, 0.7, 0),
-        Background = {
-            Color3 = Color3.fromRGB(118, 214, 255),
-            CornerRadius = UDim.new(0, 15),
-        },
-        Shadow = {
-            Color3 = Color3.fromRGB(0, 84, 147),
-            Offset = UDim2.new(0, 5, 0, 5)
-        }
-    }, {
-        
-        -- Panel Sign
-        SignLabel = Roact.createElement(ShadowedSign, {
-            Text = 'Arsenal',
-            TextSize = 50,
-            Color = Color3.fromRGB(255, 255, 255),
-            ShadowColor = Color3.fromRGB(115, 250, 121),
-        }),
-        -- Left Tab
-        LeftTab = Roact.createElement(Box, {
-            Position = UDim2.new(-0.15, 0, 0.2, 0),
-            Size = UDim2.new(0.3, 0.85),
-        }, {
-            UIListLayout = Roact.createElement('UIListLayout', {
-                FillDirection = Enum.FillDirection.Vertical,
-                HorizontalAlignment = Enum.HorizontalAlignment.Center,
-            }),
-            Button1 = PanelTabButton({
-                Button = { Text = 'Towers' },
-                Square = { BackgroundColor3 = Color3.fromRGB(115, 253, 255) },
-            }),
-            Button2 = PanelTabButton({
-                Button = { Text = 'Upgrades' },
-                Square = { BackgroundColor3 = Color3.fromRGB(212, 251, 121) },
-            }),
-            Button3 = PanelTabButton({
-                Button = { Text = 'Accessories' },
-                Square = { BackgroundColor3 = Color3.fromRGB(255, 212, 121) },
-            }),
-        }),
-        -- Test Grid Container
-        Container1 = Roact.createElement(GridContainer, {
-            Position = UDim2.new(0.1, 0, 0.15, 0),
-            Size = UDim2.new(0.9, 0, 0.85, 0),
-        }, {
-            Card1 = ItemCard({ Event = {
-                Activated = function() history:push('/itemDetail') end
-            }}),
-            Card2 = ItemCard({ Event = {
-                Activated = function() history:push('/itemDetail') end
-            }}),
-            Card3 = ItemCard({ Event = {
-                Activated = function() history:push('/itemDetail') end
-            }}),
-            Card4 = ItemCard({ Event = {
-                Activated = function() history:push('/itemDetail') end
-            }}),
-            Card5 = ItemCard({ Event = {
-                Activated = function() history:push('/itemDetail') end
-            }}),
-            Card6 = ItemCard({ Event = {
-                Activated = function() history:push('/itemDetail') end
-            }}),
-            Card7 = ItemCard({ Event = {
-                Activated = function() history:push('/itemDetail') end
-            }}),
-            Card8 = ItemCard({ Event = {
-                Activated = function() history:push('/itemDetail') end
-            }}),
-            Card9 = ItemCard({ Event = {
-                Activated = function() history:push('/itemDetail') end
-            }}),
-            Card10 = ItemCard({ Event = {
-                Activated = function() history:push('/itemDetail') end
-            }}),
-            Card11 = ItemCard({ Event = {
-                Activated = function() history:push('/itemDetail') end
-            }}),
-        })
-    })
-end
-
 function DescPanel()
     local _leftRotation = -2
     local _rightRotation = 1
@@ -293,7 +206,7 @@ end
 return {
     EntryMenu = EntryMenu,
     PlayMenu = PlayMenu,
-    ArsenalPanel = ArsenalPanel,
+    ArsenalPanel = require(script.Parent.ArsenalPanel),
     SelectLevelPanel = require(script.Parent.SelectLevelPanel),
     DescPanel = DescPanel,
 }

@@ -45,8 +45,11 @@ function Card:render()
             Thickness = 2,
             CornerRadius = UDim.new(0, 5),
             Rotation = self._rotation,
-        }
+        },
+        BackgroundColor3 = Color3.fromRGB(128, 128, 128),
+        BackgroundTransparency = self.props.active and 1 or 0.5,
     }, self.props)
+    _props.active = nil
     
     local children = _props[Roact.Children]
     _props[Roact.Children] = { Content = ContentBox(self._rotation, children)}
