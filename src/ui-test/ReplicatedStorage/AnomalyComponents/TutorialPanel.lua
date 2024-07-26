@@ -51,9 +51,9 @@ function LevelRow(chapter: string, level: string, active: boolean)
     }, cardChildren)
 end
 
-local SelectLevelPanel = Roact.PureComponent:extend('LevelPanel')
+local TutorialPanel = Roact.PureComponent:extend('TutorialPanel')
 
-function SelectLevelPanel:loadProgress()
+function TutorialPanel:loadProgress()
     if self.state.loading then return end
 
     self:setState(TableUtil.Assign(self.state, {
@@ -63,7 +63,7 @@ function SelectLevelPanel:loadProgress()
 
     -- TODO make/use a promise-like helper for such async action
     coroutine.wrap(function()
-        task.wait(math.random(50, 100) / 100)
+        task.wait(1)
         self:setState(TableUtil.Assign(self.state, {
             loading = false
         }))
@@ -71,7 +71,6 @@ function SelectLevelPanel:loadProgress()
 end
 
 local function MainContent(contentProps: {})
-    local advanceChapter = contentProps.advanceChapter
     local levelRows = contentProps.levelRows
     
     return Roact.createFragment({
@@ -104,19 +103,18 @@ local function MainContent(contentProps: {})
     })
 end
 
-function SelectLevelPanel:switchTab(whichChapter)
+function TutorialPanel:switchTab(whichChapter)
     self:setState({ chapter = whichChapter })
 end
 
-function SelectLevelPanel:init()
+function TutorialPanel:init()
     self:loadProgress()
     self:setState({ chapter = 1 })
 end
 
-function SelectLevelPanel:render()
+function TutorialPanel:render()
     local _props = self.props
     local history = _props.history
-    local advanceChapter = _props.advanceChapter or function() end
     local progress = _props.progress
     local levelCount = #CONST.Chapters[self.state.chapter].levels or 0
     local levelProgress = progress and progress[self.state.chapter]
@@ -142,7 +140,7 @@ function SelectLevelPanel:render()
     }, {
         -- Panel Sign
         SignLabel = Roact.createElement(ShadowedSign, {
-            Text = 'Select Level',
+            Text = 'Tutorials',
             TextSize = 50,
             Color = Color3.fromRGB(255, 255, 255),
             ShadowColor = Color3.fromRGB(115, 250, 121),
@@ -160,34 +158,27 @@ function SelectLevelPanel:render()
                 Text = `{CONST.Chapters[self.state.chapter].name}: {levelProgress}`,
             }),
             Button1 = PanelTabButton({
-                Button = { Text = CONST.Chapters[1].name },
+                Button = { Text = CONST.TutorialChapters[1].name },
                 Square = { BackgroundColor3 = Color3.fromRGB(115, 253, 255) },
                 Event = {
                     Activated = function() self:switchTab(1) end
                 },
             }),
             Button2 = PanelTabButton({
-                Button = { Text = CONST.Chapters[2].name},
+                Button = { Text = CONST.TutorialChapters[2].name },
                 Square = { BackgroundColor3 = Color3.fromRGB(212, 251, 121) },
                 Event = {
                     Activated = function() self:switchTab(2) end
                 },
             }),
             Button3 = PanelTabButton({
-                Button = { Text = CONST.Chapters[3].name },
+                Button = { Text = CONST.TutorialChapters[3].name },
                 Square = { BackgroundColor3 = Color3.fromRGB(255, 212, 121) },
                 Event = {
                     Activated = function() self:switchTab(3) end
                 },
             }),
             Button4 = PanelTabButton({
-                Button = { Text = '[Test]Next Level' },
-                Square = { BackgroundColor3 = Color3.fromRGB(208, 31, 190) },
-                Event = {
-                    Activated = function() advanceChapter(self.state.chapter) end
-                }
-            }),
-            Button5 = PanelTabButton({
                 Button = { Text = 'Back' },
                 Square = { BackgroundColor3 = Color3.fromRGB(208, 31, 31) },
                 Event = {
@@ -197,21 +188,18 @@ function SelectLevelPanel:render()
         }),
         self.state.loading
             and Roact.createElement('TextLabel', { Text = 'Loading ...' })
-            or MainContent({ advanceChapter = advanceChapter, levelRows = levelRows }),
+            or MainContent({ levelRows = levelRows }),
     })
 end
 
-local LevelPanelWithUIState = UIState.WithUIState(
-    SelectLevelPanel,
+local TutorialPanelWithUIState = UIState.WithUIState(
+    TutorialPanel,
     nil,
     function(dispatch)
         return {
             -- refresh = function() dispatch('reducer_test') end,
-            advanceChapter = function(whichChapter)
-                dispatch('advance_progress', { chapter = whichChapter })
-            end,
         }
     end
 )
 
-return LevelPanelWithUIState
+return TutorialPanelWithUIState

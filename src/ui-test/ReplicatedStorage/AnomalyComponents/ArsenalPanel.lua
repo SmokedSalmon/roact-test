@@ -40,7 +40,7 @@ function ArsenalPanel:loadData()
 
     -- TODO make/use a promise-like helper for such async action
     coroutine.wrap(function()
-        task.wait(1)
+        task.wait(math.random(30, 60) / 100)
         self:setState(TableUtil.Assign(self.state, {
             loading = false
         }))
@@ -147,6 +147,7 @@ function ArsenalPanel:init()
 end
 
 function ArsenalPanel:render()
+    local history = self.props.history
     return Roact.createElement(Box, {
         AnchorPoint = Vector2.new(0.5, 0.5),
         Position = UDim2.new(0.5, 0, 0.5, 0),
@@ -205,6 +206,13 @@ function ArsenalPanel:render()
                         self:loadData()
                     end
                 },
+            }),
+            Button4 = PanelTabButton({
+                Button = { Text = 'Back' },
+                Square = { BackgroundColor3 = Color3.fromRGB(208, 31, 31) },
+                Event = {
+                    Activated = function() history:goBack() end
+                }
             }),
         }),
         self.state.loading

@@ -52,8 +52,11 @@ function Button:render()
         _props.Shadow = nil
         _props.Padding = nil
 
-        -- Root Box already takes over the AnchorPoint as a whole, thus the TextButton always sits in the center
+        -- Root Box already takes over the appearance and physical property as a whole, thus the TextButton always sits in the center
         _props.AnchorPoint = Vector2.new(0.5, 0.5)
+        _props.Position = UDim2.new(0.5, 0, 0.5, 0)
+        if _boxProps.Background then _props.BackgroundTransparency = 1 end
+        if _boxProps.Border then _props.BorderSizePixel = 0 end
         return Roact.createElement(Box, _boxProps, {
             TextButton = Roact.createElement(WithEvents('TextButton'), _props, {})
         })

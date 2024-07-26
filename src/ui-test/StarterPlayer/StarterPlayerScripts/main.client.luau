@@ -124,12 +124,22 @@ local function LevelPanel()
     })
 end
 
+local function TutorialPanel()
+    return Roact.createElement(RoactRouter.Route, {
+        path = '/play/tutorial',
+        exact = true,
+        render = function(routeProps)
+            return AnomalyComponents.TutorialPanel(routeProps)
+        end
+    })
+end
+
 local function DescPanel()
     return Roact.createElement(RoactRouter.Route, {
         path = '/itemDetail',
         exact = true,
         render = function(routeProps)
-            return AnomalyComponents.DescPanel(routeProps)
+            return AnomalyComponents.ItemDescPanel(routeProps)
         end
     })
 end
@@ -175,6 +185,7 @@ local GuiRootWithRouter = Roact.createElement(RoactRouter.Router, nil, {
                     Roact.createElement(PlayMenu),
                     Roact.createElement(ArsenalPanel),
                     Roact.createElement(LevelPanel),
+                    Roact.createElement(TutorialPanel),
                     Roact.createElement(DescPanel),
                     Roact.createElement(TestIcon),
                     -- Layout = Roact.createElement('UIListLayout', {

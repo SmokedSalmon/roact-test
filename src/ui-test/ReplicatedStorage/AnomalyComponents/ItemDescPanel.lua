@@ -1,8 +1,12 @@
+--[[
+    2nd-level Menu - Arsenal Panel
+]]
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
 local Roact = require(ReplicatedStorage.Packages.roact)
 local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
+local UIState = require(ReplicatedStorage.UIState)
 
 local Components = ReplicatedStorage.Shared.Components
 local AtomicComponents = Components.Atomic
@@ -21,100 +25,12 @@ local StatItem = require(script.Parent.StatItem)
 local DescGallery = require(script.Parent.DescGallery)
 local ListContainer = require(AtomicComponents.ListContainer)
 local Box = require(AtomicComponents.Box)
+local TButton = require(Components.TButton)
 
-function EntryMenu(props)
-    local history = props.history
-    return Roact.createElement(Box, {
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        Position = UDim2.new(0.5, 0, 0.5, 0),
-        Size = UDim2.new(0.5, 0, 0.8, 0),
-    }, {
-        List = Roact.createElement(Box, {
-            AnchorPoint = Vector2.new(0.5, 0),
-            Position = UDim2.new(0.5, 0, 0, 0),
-            Size = UDim2.new(1, 0, 1, 0),
-        }, {
-            UIListLayout = Roact.createElement('UIListLayout', {
-                FillDirection = Enum.FillDirection.Vertical,
-                HorizontalAlignment = Enum.HorizontalAlignment.Center,
-                VerticalAlignment = Enum.VerticalAlignment.Center,
-            }, {}),
-            Button1 = Roact.createElement(ColorSquareButton, {
-                Button = { Text = 'Play' },
-                Square = { BackgroundColor3 = Color3.fromRGB(115, 253, 255) },
-                Size = UDim2.new(1, 0, 0, 60),
-                Event = {
-                    Activated = function() history:push('/play') end
-                },
-            }),
-            Button2 = Roact.createElement(ColorSquareButton, {
-                Button = { Text = 'Arsenal' },
-                Square = { BackgroundColor3 = Color3.fromRGB(212, 251, 121) },
-                Size = UDim2.new(1, 0, 0, 60),
-                Event = {
-                    Activated = function() history:push('/arsenal') end
-                },
-            }),
-            Button3 = Roact.createElement(ColorSquareButton, {
-                Button = { Text = 'Encyclopedia' },
-                Square = { BackgroundColor3 = Color3.fromRGB(255, 212, 121) },
-                Size = UDim2.new(1, 0, 0, 60),
-                Event = {
-                    Activated = function() history:push('/encyclopedia') end
-                },
-            }),
-        })
-    })
-end
+local ItemDescPanel = Roact.PureComponent:extend('ItemDescPanel')
 
-function PlayMenu(routeProps)
-    local history = routeProps.history
-    return Roact.createElement(Box, {
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        Position = UDim2.new(0.5, 0, 0.5, 0),
-        Size = UDim2.new(0.5, 0, 0.8, 0),
-    }, {
-        List = Roact.createElement(Box, {
-            AnchorPoint = Vector2.new(0.5, 0),
-            Position = UDim2.new(0.5, 0, 0, 0),
-            Size = UDim2.new(1, 0, 1, 0),
-        }, {
-            UIListLayout = Roact.createElement('UIListLayout', {
-                FillDirection = Enum.FillDirection.Vertical,
-                HorizontalAlignment = Enum.HorizontalAlignment.Center,
-                VerticalAlignment = Enum.VerticalAlignment.Center,
-            }, {}),
-            Button1 = Roact.createElement(ColorSquareButton, {
-                Button = { Text = 'Tutorial' },
-                Square = { BackgroundColor3 = Color3.fromRGB(115, 253, 255) },
-                Size = UDim2.new(1, 0, 0, 60),
-                Event = {
-                    Activated = function() history:push('/play/tutorial') end
-                }
-            }),
-            Button2 = Roact.createElement(ColorSquareButton, {
-                Button = { Text = 'New Campaign' },
-                Square = { BackgroundColor3 = Color3.fromRGB(212, 251, 121) },
-                Size = UDim2.new(1, 0, 0, 60)
-            }),
-            Button3 = Roact.createElement(ColorSquareButton, {
-                Button = { Text = 'Continue' },
-                Square = { BackgroundColor3 = Color3.fromRGB(255, 212, 121) },
-                Size = UDim2.new(1, 0, 0, 60)
-            }),
-            Button4 = Roact.createElement(ColorSquareButton, {
-                Button = { Text = 'Select Level' },
-                Square = { BackgroundColor3 = Color3.fromRGB(212, 251, 121) },
-                Size = UDim2.new(1, 0, 0, 60),
-                Event = {
-                    Activated = function() history:push('/play/level') end
-                },
-            }),
-        })
-    })
-end
-
-function DescPanel()
+function ItemDescPanel:render()
+    local history = self.props.history
     local _leftRotation = -2
     local _rightRotation = 1
     return Roact.createElement(Box, {
@@ -182,6 +98,49 @@ function DescPanel()
                         TextWrapped = true,
                     })
                 }),
+                Row3 = Roact.createElement(ColumnContainer, {
+                    AutomaticSize = Enum.AutomaticSize.X,
+                    Size = UDim2.new(0, 0, 0.15, 0),
+                    Scroll = false,
+                    Layout = {
+                        Padding = UDim.new(0, 20),
+                    }
+                }, {
+                    Buy = Roact.createElement(TButton, {
+                        Size = UDim2.new(0, 150, 1, 0),
+                        Text = 'Buy',
+                        TextSize = 20,
+                        TextColor3 = Color3.fromRGB(255, 255, 255),
+                        FontFace = Font.fromName('Bangers'),
+                        Background = {
+                            CornerRadius = UDim.new(0, 5),
+                            Color3 = Color3.fromRGB(0, 192, 255),
+                        },
+                        Shadow = {
+                            Color3 = Color3.fromRGB(0, 124, 166)
+                        },
+                        Event = {
+                            Activated = function() print('Bought') end,
+                        },
+                    }),
+                    Cancel = Roact.createElement(TButton, {
+                        Size = UDim2.new(0, 150, 1, 0),
+                        Text = 'Cancel',
+                        TextSize = 20,
+                        TextColor3 = Color3.fromRGB(255, 255, 255),
+                        FontFace = Font.fromName('Bangers'),
+                        Background = {
+                            CornerRadius = UDim.new(0, 5),
+                            Color3 = Color3.fromRGB(255, 0, 0),
+                        },
+                        Shadow = {
+                            Color3 = Color3.fromRGB(114, 2, 2)
+                        },
+                        Event = {
+                            Activated = function() history:goBack() end,
+                        },
+                    })
+                })
             }),
         }),
         RightPanel = Roact.createElement(DescGallery, {
@@ -206,11 +165,15 @@ function DescPanel()
     })
 end
 
-return {
-    EntryMenu = EntryMenu,
-    PlayMenu = PlayMenu,
-    ArsenalPanel = require(script.Parent.ArsenalPanel),
-    SelectLevelPanel = require(script.Parent.SelectLevelPanel),
-    TutorialPanel = require(script.Parent.TutorialPanel),
-    ItemDescPanel = require(script.Parent.ItemDescPanel),
-}
+-- Connect Client UI Global State
+local ItemDescPanelWithUIState = UIState.WithUIState(
+    ItemDescPanel,
+    function(state)
+        return {}
+    end,
+    function(dispatch)
+        return {}
+    end
+)
+
+return ItemDescPanelWithUIState

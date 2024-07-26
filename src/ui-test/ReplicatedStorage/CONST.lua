@@ -43,6 +43,43 @@ local Chapters = {
 }
 table.freeze(Chapters)
 
+local TutorialChapters = {
+    {
+        id = 'tutorial-c1',
+        name = 'Basics',
+        levels = {
+            { id = 't1-1', name = 'Basics-1' },
+            { id = 't1-2', name = 'Basics-2' },
+            { id = 't1-3', name = 'Basics-3' },
+            { id = 't1-4', name = 'Basics-4' },
+            { id = 't1-5', name = 'Basics-5' },
+        },
+        next = 'tutorial-c2',
+    },
+    {
+        id = 'tutorial-c2',
+        name = 'Block Them Up',
+        levels = {
+            { id = 't2-1', name = 'Block Them Up-1' },
+            { id = 't2-2', name = 'Block Them Up-2' },
+            { id = 't2-3', name = 'Block Them Up-3' },
+            { id = 't2-4', name = 'Block Them Up-4' },
+        },
+        next = 'Chapter3',
+    },
+    {
+        id = 'tutorial-c3',
+        name = 'Combos, Tech-up',
+        levels = {
+            { id = 't3-1', name = 'Combos & Tech 3-1' },
+            { id = 't3-2', name = 'Combos & Tech 3-2' },
+        },
+        next = nil,
+    },
+}
+table.freeze(TutorialChapters)
+
 return {
     Chapters = Chapters,
+    TutorialChapters = TutorialChapters,
 }

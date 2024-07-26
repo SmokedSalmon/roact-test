@@ -8,6 +8,11 @@ local AtomicComponents = ReplicatedStorage.Shared.Components.Atomic
 local Box = require(AtomicComponents.Box)
 
 -- Constants & Configs
+local DefaultLayoutProps = {
+    SortOrder = Enum.SortOrder.LayoutOrder,
+    FillDirection = Enum.FillDirection.Horizontal,
+    VerticalAlignment = Enum.VerticalAlignment.Center,
+}
 local DefaultRootContainerProps = {
     Position = UDim2.new(0, 0, 0, 0),
     Size = UDim2.new(1, 0, 1, 0),
@@ -27,15 +32,12 @@ local ColumnContainer = Roact.Component:extend('RowContainer')
 
 function ColumnContainer:render()
     local _props = TableUtil.Assign(DefaultRootContainerProps, self.props or {})
+    local _layoutProps = TableUtil.Assign(DefaultLayoutProps, _props.Layout)
+    _props.Layout = nil
 
     _props[Roact.Children] = TableUtil.Assign({
-        UIListLayout = Roact.createElement('UIListLayout', {
-            FillDirection = Enum.FillDirection.Horizontal,
-            VerticalAlignment = Enum.VerticalAlignment.Center,
-            Padding = (_props.List and _props.List.Padding) or nil,
-        }, {}),
+        UIListLayout = Roact.createElement('UIListLayout', _layoutProps),
     }, _props[Roact.Children])
-    _props.List = nil
     
     return Roact.createElement(Box, _props)
 end
