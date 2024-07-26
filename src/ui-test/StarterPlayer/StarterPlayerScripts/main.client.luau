@@ -114,22 +114,12 @@ local function ArsenalPanel()
     })
 end
 
-local LevelPanelWithUIState = UIState.WithUIState(
-    AnomalyComponents.SelectLevelPanel,
-    nil,
-    function(dispatch)
-        return {
-            refresh = function() dispatch('reducer_test') end,
-            advanceChapter = function() dispatch('advance_progress', { chapter = 'Chapter1' }) end,
-        }
-    end
-)
 local function LevelPanel()
     return Roact.createElement(RoactRouter.Route, {
         path = '/play/level',
         exact = true,
         render = function(routeProps)
-            return LevelPanelWithUIState(routeProps)
+            return AnomalyComponents.SelectLevelPanel(routeProps)
         end
     })
 end

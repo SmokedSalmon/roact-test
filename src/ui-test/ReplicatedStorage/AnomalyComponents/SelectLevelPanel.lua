@@ -3,7 +3,9 @@ local Players = game:GetService("Players")
 
 local Roact = require(ReplicatedStorage.Packages.roact)
 local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
+local UIState = require(ReplicatedStorage.UIState)
 
+local CONST = require(ReplicatedStorage.CONST)
 local Components = ReplicatedStorage.Shared.Components
 local AtomicComponents = Components.Atomic
 local StoreService = require(ReplicatedStorage.Shared.Store)
@@ -35,9 +37,9 @@ function LevelCard()
 end
 
 function LevelRow(chapter: string, level: string, active: boolean)
-    local rCount = math.round(math.random(1, 3))
+    local pCount = math.round(math.random(1, 3))
     local cardChildren = {}
-    for i = 1, rCount do
+    for i = 1, pCount do
         cardChildren[`Card{i}`] = LevelCard()
     end
     return Roact.createElement(ColumnContainer, {
@@ -49,7 +51,7 @@ function LevelRow(chapter: string, level: string, active: boolean)
     }, cardChildren)
 end
 
-local SelectLevelPanel = Roact.PureComponent:extend('PlayMenu')
+local SelectLevelPanel = Roact.PureComponent:extend('LevelPanel')
 
 function SelectLevelPanel:loadProgress()
     if self.state.loading then return end
@@ -68,44 +70,11 @@ function SelectLevelPanel:loadProgress()
     end)()
 end
 
-local function MainContent(contents: {})
-    local level = contents.level
-    local advanceChapter = contents.advanceChapter
-    local levelRows = contents.levelRows
+local function MainContent(contentProps: {})
+    local advanceChapter = contentProps.advanceChapter
+    local levelRows = contentProps.levelRows
     
     return Roact.createFragment({
-        -- Left Tab
-        LeftTab = Roact.createElement(Box, {
-            Position = UDim2.new(-0.15, 0, 0.2, 0),
-            Size = UDim2.new(0.3, 0.85),
-        }, {
-            UIListLayout = Roact.createElement('UIListLayout', {
-                FillDirection = Enum.FillDirection.Vertical,
-                HorizontalAlignment = Enum.HorizontalAlignment.Center,
-            }),
-            TestText = Roact.createElement('TextLabel', {
-                Text = `Chapter1: {level}`,
-            }),
-            Button1 = PanelTabButton({
-                Button = { Text = 'Basics' },
-                Square = { BackgroundColor3 = Color3.fromRGB(115, 253, 255) },
-            }),
-            Button2 = PanelTabButton({
-                Button = { Text = 'Block Them Up' },
-                Square = { BackgroundColor3 = Color3.fromRGB(212, 251, 121) },
-            }),
-            Button3 = PanelTabButton({
-                Button = { Text = 'Combos, Tech-up' },
-                Square = { BackgroundColor3 = Color3.fromRGB(255, 212, 121) },
-            }),
-            Button4 = PanelTabButton({
-                Button = { Text = 'Next Level' },
-                Square = { BackgroundColor3 = Color3.fromRGB(208, 31, 190) },
-                Event = {
-                    Activated = advanceChapter
-                }
-            }),
-        }),
         -- Row/Column Container
         Container1 = Roact.createElement(RowContainer, {
             Position = UDim2.new(0.1, 0, 0.15, 0),
@@ -135,21 +104,26 @@ local function MainContent(contents: {})
     })
 end
 
+function SelectLevelPanel:switchTab(whichChapter)
+    self:setState({ chapter = whichChapter })
+end
+
 function SelectLevelPanel:init()
     self:loadProgress()
+    self:setState({ chapter = 1 })
 end
 
 function SelectLevelPanel:render()
     local _props = self.props
-    local refresh = _props.refresh or function() end
     local advanceChapter = _props.advanceChapter or function() end
     local progress = _props.progress
-    local level = progress and progress.Chapter1
+    local levelCount = #CONST.Chapters[self.state.chapter].levels or 0
+    local levelProgress = progress and progress[self.state.chapter]
 
     local levelRows = {}
-    for i = 1, 7 do
+    for i = 1, levelCount do
         -- Row1 is reserved for Chapter Description
-        levelRows[`Row{i + 1}`] = LevelRow('Chapter1', i, i <= level)
+        levelRows[`Row{i + 1}`] = LevelRow(CONST.Chapters[self.state.chapter].id, i, i <= levelProgress)
     end
 
     return Roact.createElement(Box, {
@@ -172,10 +146,64 @@ function SelectLevelPanel:render()
             Color = Color3.fromRGB(255, 255, 255),
             ShadowColor = Color3.fromRGB(115, 250, 121),
         }),
+        -- Left Tab
+        LeftTab = Roact.createElement(Box, {
+            Position = UDim2.new(-0.15, 0, 0.2, 0),
+            Size = UDim2.new(0.3, 0.85),
+        }, {
+            UIListLayout = Roact.createElement('UIListLayout', {
+                FillDirection = Enum.FillDirection.Vertical,
+                HorizontalAlignment = Enum.HorizontalAlignment.Center,
+            }),
+            TestText = Roact.createElement('TextLabel', {
+                Text = `{CONST.Chapters[self.state.chapter].name}: {levelProgress}`,
+            }),
+            Button1 = PanelTabButton({
+                Button = { Text = 'Basics' },
+                Square = { BackgroundColor3 = Color3.fromRGB(115, 253, 255) },
+                Event = {
+                    Activated = function() self:switchTab(1) end
+                },
+            }),
+            Button2 = PanelTabButton({
+                Button = { Text = 'Block Them Up' },
+                Square = { BackgroundColor3 = Color3.fromRGB(212, 251, 121) },
+                Event = {
+                    Activated = function() self:switchTab(2) end
+                },
+            }),
+            Button3 = PanelTabButton({
+                Button = { Text = 'Combos, Tech-up' },
+                Square = { BackgroundColor3 = Color3.fromRGB(255, 212, 121) },
+                Event = {
+                    Activated = function() self:switchTab(3) end
+                },
+            }),
+            Button4 = PanelTabButton({
+                Button = { Text = 'Next Level' },
+                Square = { BackgroundColor3 = Color3.fromRGB(208, 31, 190) },
+                Event = {
+                    Activated = function() advanceChapter(self.state.chapter) end
+                }
+            }),
+        }),
         self.state.loading
             and Roact.createElement('TextLabel', { Text = 'Loading ...' })
-            or MainContent({ level = level, advanceChapter = advanceChapter, levelRows = levelRows }),
+            or MainContent({ advanceChapter = advanceChapter, levelRows = levelRows }),
     })
 end
 
-return SelectLevelPanel
+local LevelPanelWithUIState = UIState.WithUIState(
+    SelectLevelPanel,
+    nil,
+    function(dispatch)
+        return {
+            -- refresh = function() dispatch('reducer_test') end,
+            advanceChapter = function(whichChapter)
+                dispatch('advance_progress', { chapter = whichChapter })
+            end,
+        }
+    end
+)
+
+return LevelPanelWithUIState

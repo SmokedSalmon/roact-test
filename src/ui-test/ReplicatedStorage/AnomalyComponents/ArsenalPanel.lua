@@ -73,6 +73,7 @@ local _AccessoryDef = {
     [4] = {},
     [5] = {},
 }
+
 local function TowerCards(history, status)
     local cards = {}
     local _status = status or {}
