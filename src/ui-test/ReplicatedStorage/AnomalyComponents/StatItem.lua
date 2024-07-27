@@ -12,10 +12,10 @@ local StatItem = Roact.Component:extend('StatItem')
 function StatItem()
     return Roact.createElement(Box, {
         Size = UDim2.new(1/3, 0, 0, 60),
-        Padding = {
-            PaddingLeft = UDim.new(0, 5),
-            PaddingRight = UDim.new(0, 5),
-        }
+        -- Padding = {
+        --     PaddingLeft = UDim.new(0, 5),
+        --     PaddingRight = UDim.new(0, 5),
+        -- }
     }, {
         StatBG = Roact.createElement(Box, {
             AnchorPoint = Vector2.new(0, 0.5),

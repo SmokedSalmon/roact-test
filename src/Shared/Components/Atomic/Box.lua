@@ -22,12 +22,6 @@ local DefaultZIs = {
     BG = -10,
     Shadow = -11,
 }
-local DefaultPadding = {
-    PaddingLeft = UDim.new(0, 0),
-    PaddingTop = UDim.new(0, 0),
-    PaddingRight = UDim.new(0, 0),
-    PaddingBottom = UDim.new(0, 0),
-}
 local DefaultShadowOffset = UDim2.new(0, 3, 0, 3)
 local DefaultFrameProps = {
     Position = UDim2.new(0, 0, 0, 0),
@@ -87,34 +81,30 @@ function Box:render()
     local _rootChildren = {}
 
     -- Padding
-    local _paddingProps = _props.Padding and TableUtil.Assign(DefaultPadding, _props.Padding)
-    if _paddingProps then
-        _contentChildren['UIPadding'] = Roact.createElement('UIPadding', _paddingProps)
-    end
-
+    if _props.Padding then
+        _contentChildren['UIPadding'] = Roact.createElement('UIPadding', _props.Padding)
     -- Content Frame, mainly cater Padding
-    local _contentProps = {
-        AutomaticSize = _props.AutomaticSize,
-        Position = UDim2.new(0, 0, 0, 0),
-        -- TODO align with outer box existence
-        -- Rotation = _props.Rotation,
-        BackgroundTransparency = 1,
-        BorderSizePixel = 0,
-        ZIndex = DefaultZIs.Content,
-    }
-
-    if _props.AutomaticSize == Enum.AutomaticSize.XY then
-        _contentProps.Size = UDim2.new(0, 0, 0, 0)
-        _props.Size = UDim2.new(0, 0, 0, 0)
-    elseif _props.AutomaticSize == Enum.AutomaticSize.X then
-        _contentProps.Size = UDim2.new(0, 0, 1, 0)
-        _props.Size = UDim2.new(UDim.new(0, 0), _props.Size.Y)
-    elseif _props.AutomaticSize == Enum.AutomaticSize.Y then
-        _contentProps.Size = UDim2.new(1, 0, 0, 0)
-        _props.Size = UDim2.new(_props.Size.X, UDim.new(0, 0))
+        local _contentProps = {
+            AutomaticSize = _props.AutomaticSize,
+            Position = UDim2.new(0, 0, 0, 0),
+            -- TODO align with outer box existence
+            -- Rotation = _props.Rotation,
+            BackgroundTransparency = 1,
+            BorderSizePixel = 0,
+            ZIndex = DefaultZIs.Content,
+        }
+        if _props.AutomaticSize == Enum.AutomaticSize.XY then
+            _contentProps.Size = UDim2.new(0, 0, 0, 0)
+        elseif _props.AutomaticSize == Enum.AutomaticSize.X then
+            _contentProps.Size = UDim2.new(0, 0, 1, 0)
+        elseif _props.AutomaticSize == Enum.AutomaticSize.Y then
+            _contentProps.Size = UDim2.new(1, 0, 0, 0)
+        else
+            _contentProps.Size = UDim2.new(1, 0, 1, 0)
+        end
+        _rootChildren['__Content'] = Roact.createElement('Frame', _contentProps, _contentChildren)
     else
-        _contentProps.Size = UDim2.new(1, 0, 1, 0)
-        _props.Size = _props.Size
+        _rootChildren = _contentChildren
     end
 
     -- Background
@@ -127,9 +117,6 @@ function Box:render()
             Rotation = _props.Background.Rotation,
             BorderColor3 = _props.BorderColor3,
         })
-        -- if _paddingProps then
-        --     _bgProps.Size += UDim2.new(_paddingProps.PaddingLeft, _paddingProps.PaddingTop) + UDim2.new(_paddingProps.PaddingRight, _paddingProps.PaddingBottom)
-        -- end
         _bgProps[Roact.Children] = {}
         if _props.Background.CornerRadius then
             _bgProps[Roact.Children].UICorner = Roact.createElement('UICorner', { CornerRadius = _props.Background.CornerRadius })
@@ -235,7 +222,6 @@ function Box:render()
     if _bgProps then
         _rootChildren.__BG = Roact.createElement('Frame', _bgProps)
     end
-    _rootChildren['__Content'] = Roact.createElement('Frame', _contentProps, _contentChildren)
     _props[Roact.Children] = _rootChildren
     return _scroll
         and Roact.createElement('ScrollingFrame', _props)

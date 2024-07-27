@@ -74,8 +74,8 @@ function ItemDescPanel:render()
             },
             Shadow = {
                 Color3 = Color3.fromRGB(0, 84, 147),
-                Offset = UDim2.new(0, 5, 0, 5),
-                Rotation = _leftRotation + 1,
+                Offset = UDim2.new(0, 15, 0, 15),
+                Rotation = _leftRotation + 0.5,
             },
         }, {
             SignLabel = Roact.createElement(ShadowedSign, {
