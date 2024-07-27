@@ -6,7 +6,6 @@ local Roact = require(ReplicatedStorage.Packages.roact)
 local Box = require(ReplicatedStorage.Shared.Components.Atomic.Box)
 
 -- Constants & Configs
-local defaultProps = {}
 
 local StatItem = Roact.Component:extend('StatItem')
 
@@ -32,7 +31,7 @@ function StatItem()
             Size = UDim2.new(1, 0, 1, 0),
         }, {
             Icon = Roact.createElement(Box, {
-                AutomaticSize = Enum.AutomaticSize.Y,
+                AutomaticSize = Enum.AutomaticSize.None,
                 Position = UDim2.new(0, 0, 0.15, 0),
                 Size = UDim2.new(0, 40, 0, 40),
             }, {
@@ -42,6 +41,7 @@ function StatItem()
                     Image = 'rbxassetid://13384578429',
                     BackgroundTransparency = 1,
                     BorderSizePixel = 0,
+                    ScaleType = Enum.ScaleType.Crop,
                 })
             }),
             Value = Roact.createElement('TextLabel', {

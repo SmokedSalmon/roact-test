@@ -10,16 +10,10 @@ local AtomicComponents = Components.Atomic
 local Box = require(AtomicComponents.Box)
 
 -- Constants & Configs
-local DefaultPadding = {
-    PaddingLeft = UDim.new(0, 0),
-    PaddingTop = UDim.new(0, 0),
-    PaddingRight = UDim.new(0, 0),
-    PaddingBottom = UDim.new(0, 0),
-}
 
 local Card = Roact.PureComponent:extend('Card')
 
-local function ContentBox(rotation: number, children: {Roact.Component}?)
+local function ContentBox(children: {Roact.Component}?)
     return Roact.createElement(Box, {
         Size = UDim2.new(1, 0, 1, 0),
         Background = {
@@ -29,7 +23,6 @@ local function ContentBox(rotation: number, children: {Roact.Component}?)
                 Image = 'rbxasset://textures/ui/GuiImagePlaceholder.png',
             }
         },
-        Rotation = rotation,
     }, children)
 end
 
@@ -38,9 +31,7 @@ function Card:init()
 end
 
 function Card:render()
-    -- print(`Card render`)
     local _props = TableUtil.Assign({
-        Padding = DefaultPadding,
         Border = {
             Thickness = 2,
             CornerRadius = UDim.new(0, 5),
@@ -52,7 +43,7 @@ function Card:render()
     _props.active = nil
     
     local children = _props[Roact.Children]
-    _props[Roact.Children] = { Content = ContentBox(self._rotation, children)}
+    _props[Roact.Children] = { Content = ContentBox(children)}
 
     _props.Name = _props.Name or 'Card'
     -- _props.ClipDescendants = true

@@ -10,12 +10,6 @@ local WithEvents = require(ReplicatedStorage.Shared.Components.Atomic.WithEvents
 
 -- Constants & Configs
 local DefaultProps = {
-    Padding = {
-        PaddingLeft = UDim.new(0, 10),
-        PaddingTop = UDim.new(0, 10),
-        PaddingRight = UDim.new(0, 10),
-        PaddingBottom = UDim.new(0, 10),
-    },
     active = true,
 }
 

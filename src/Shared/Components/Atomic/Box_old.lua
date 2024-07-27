@@ -17,7 +17,6 @@ local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
 -- TODO centralize zIndex settings
 -- Default ZIndexes for related elements
 local DefaultZIs = {
-    Content = 5,
     Border = 10,
     BG = -10,
     Shadow = -11,
@@ -75,46 +74,19 @@ local Box = Roact.Component:extend('Box')
 function Box:render()
     -- Verify properties & options
     local _props = TableUtil.Assign(DefaultFrameProps, self.props or {})
-    _props.BackgroundTransparency = 1
-    _props.BorderSizePixel = 0
     
     -- Children that may conflicts Background, Border and Padding
     local _contentChildren = _props[Roact.Children] or {}
-    -- if _contentChildren.__BG or _contentChildren.__Shadow or _contentChildren.__Border or _contentChildren.UIPadding or _contentChildren.UICorner then
-    --     warn('Manually creating the following elements should be avoided: {__BG, __Shadow, __Border, UIPadding, UICorner}')
-    --     warn('They will be replaced by those of the same name which are created internally by this Component')
-    -- end
+    if _contentChildren.__BG or _contentChildren.__Shadow or _contentChildren.__Border or _contentChildren.UIPadding or _contentChildren.UICorner then
+        warn('Manually creating the following elements should be avoided: {__BG, __Shadow, __Border, UIPadding, UICorner}')
+        warn('They will be replaced by those of the same name which are created internally by this Component')
+    end
     local _rootChildren = {}
 
     -- Padding
     local _paddingProps = _props.Padding and TableUtil.Assign(DefaultPadding, _props.Padding)
     if _paddingProps then
         _contentChildren['UIPadding'] = Roact.createElement('UIPadding', _paddingProps)
-    end
-
-    -- Content Frame, mainly cater Padding
-    local _contentProps = {
-        AutomaticSize = _props.AutomaticSize,
-        Position = UDim2.new(0, 0, 0, 0),
-        -- TODO align with outer box existence
-        -- Rotation = _props.Rotation,
-        BackgroundTransparency = 1,
-        BorderSizePixel = 0,
-        ZIndex = DefaultZIs.Content,
-    }
-
-    if _props.AutomaticSize == Enum.AutomaticSize.XY then
-        _contentProps.Size = UDim2.new(0, 0, 0, 0)
-        _props.Size = UDim2.new(0, 0, 0, 0)
-    elseif _props.AutomaticSize == Enum.AutomaticSize.X then
-        _contentProps.Size = UDim2.new(0, 0, 1, 0)
-        _props.Size = UDim2.new(UDim.new(0, 0), _props.Size.Y)
-    elseif _props.AutomaticSize == Enum.AutomaticSize.Y then
-        _contentProps.Size = UDim2.new(1, 0, 0, 0)
-        _props.Size = UDim2.new(_props.Size.X, UDim.new(0, 0))
-    else
-        _contentProps.Size = UDim2.new(1, 0, 1, 0)
-        _props.Size = _props.Size
     end
 
     -- Background
@@ -235,7 +207,13 @@ function Box:render()
     if _bgProps then
         _rootChildren.__BG = Roact.createElement('Frame', _bgProps)
     end
-    _rootChildren['__Content'] = Roact.createElement('Frame', _contentProps, _contentChildren)
+    _rootChildren['__Content'] = Roact.createElement('Frame', {
+        AutomaticSize = Enum.AutomaticSize.XY,
+        Position = UDim2.new(0, 0, 0, 0),
+        Size = UDim2.new(0, 0, 0, 0),
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
+    }, _contentChildren)
     _props[Roact.Children] = _rootChildren
     return _scroll
         and Roact.createElement('ScrollingFrame', _props)

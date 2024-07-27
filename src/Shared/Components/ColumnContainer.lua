@@ -12,6 +12,7 @@ local DefaultLayoutProps = {
     SortOrder = Enum.SortOrder.LayoutOrder,
     FillDirection = Enum.FillDirection.Horizontal,
     VerticalAlignment = Enum.VerticalAlignment.Center,
+    Padding = UDim.new(0, 10),
 }
 local DefaultRootContainerProps = {
     Position = UDim2.new(0, 0, 0, 0),

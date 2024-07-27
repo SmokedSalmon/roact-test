@@ -32,6 +32,7 @@ function Button:render()
     
     if _rootBox then
         local _boxProps = {
+            AutomaticSize = _props.AutomaticSize,
             Background = _props.Background,
             Border = _props.Border,
             Shadow = _props.Shadow,
@@ -40,21 +41,21 @@ function Button:render()
             Position = _props.Position,
             Size = _props.Size
         }
-        if _boxProps.Padding then
-            local xPadding = _boxProps.Padding.PaddingLeft or UDim.new(0, 0)
-            xPadding += _boxProps.Padding.PaddingRight or UDim.new(0, 0)
-            local yPadding = _boxProps.Padding.PaddingTop or UDim.new(0, 0)
-            yPadding += _boxProps.Padding.PaddingBottom or UDim.new(0, 0)
-            _boxProps.Size += UDim2.new(xPadding, yPadding)
-        end
+        -- if _boxProps.Padding then
+        --     local xPadding = _boxProps.Padding.PaddingLeft or UDim.new(0, 0)
+        --     xPadding += _boxProps.Padding.PaddingRight or UDim.new(0, 0)
+        --     local yPadding = _boxProps.Padding.PaddingTop or UDim.new(0, 0)
+        --     yPadding += _boxProps.Padding.PaddingBottom or UDim.new(0, 0)
+        --     _boxProps.Size += UDim2.new(xPadding, yPadding)
+        -- end
         _props.Background = nil
         _props.Border = nil
         _props.Shadow = nil
         _props.Padding = nil
 
-        -- Root Box already takes over the appearance and physical property as a whole, thus the TextButton always sits in the center
-        _props.AnchorPoint = Vector2.new(0.5, 0.5)
-        _props.Position = UDim2.new(0.5, 0, 0.5, 0)
+        -- Root Box already takes over the appearance and physical property as a whole, thus the TextButton always sits in the TOP LEFT for the auto-sizing of its parents to work
+        _props.AnchorPoint = Vector2.new(0, 0)
+        _props.Position = UDim2.new(0, 0, 0, 0)
         if _boxProps.Background then _props.BackgroundTransparency = 1 end
         if _boxProps.Border then _props.BorderSizePixel = 0 end
         return Roact.createElement(Box, _boxProps, {

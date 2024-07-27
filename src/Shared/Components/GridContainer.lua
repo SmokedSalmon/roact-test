@@ -11,8 +11,8 @@ local Box = require(AtomicComponents.Box)
 -- Constants & Configs
 local DefaultLayoutProps = {
     SortOrder = Enum.SortOrder.LayoutOrder,
-    CellPadding = UDim2.new(0, 0, 0, 0),
-    CellSize = UDim2.new(1/3, 0, 1/3, 0), -- TODO Parameterized
+    CellPadding = UDim2.new(0, 20, 0, 20),
+    CellSize = UDim2.new(1/3, -20, 1/3, -20), -- TODO Parameterized
     FillDirection = Enum.FillDirection.Horizontal,
 }
 local DefaultRootContainerProps = {

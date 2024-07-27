@@ -26,13 +26,7 @@ local Box = require(AtomicComponents.Box)
 
 function LevelCard()
     return ItemCard({
-        Size = UDim2.new(0, 160, 0, 100 ),
-        Padding = {
-            PaddingLeft = UDim.new(0, 10),
-            PaddingTop = UDim.new(0, 10),
-            PaddingRight = UDim.new(0, 10),
-            PaddingBottom = UDim.new(0, 10),
-        }
+        Size = UDim2.new(0, 160, 0, 100 )
     })
 end
 
@@ -48,6 +42,7 @@ function LevelRow(chapter: string, level: string, active: boolean)
         Scroll = false,
         BackgroundColor3 = Color3.fromRGB(128, 128, 128),
         BackgroundTransparency = active and 1 or 0.5,
+        Layout = { Padding = UDim.new(0, 20) }
     }, cardChildren)
 end
 

@@ -29,6 +29,33 @@ local TButton = require(Components.TButton)
 
 local ItemDescPanel = Roact.PureComponent:extend('ItemDescPanel')
 
+local function ActionButton(props: {}?)
+    local _props = props or {}
+    return Roact.createElement(TButton, {
+        AutomaticSize = Enum.AutomaticSize.XY,
+        Size = UDim2.new(0, 0, 0, 0),
+        Text = _props.Text or 'Button',
+        TextSize = 20,
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        FontFace = Font.fromName('Bangers'),
+        Padding = {
+            PaddingLeft = UDim.new(0, 10),
+            PaddingTop = UDim.new(0, 10),
+            PaddingRight = UDim.new(0, 10),
+            PaddingBottom = UDim.new(0, 10),
+        },
+        Background = {
+            CornerRadius = _props.CornerRadius or UDim.new(0, 5),
+            Color3 = _props.Color3 or Color3.fromRGB(0, 192, 255),
+        },
+        Shadow = {
+            Color3 = _props.ShadowColor3 or Color3.fromRGB(0, 124, 166)
+        },
+        Event = _props.Event,
+    })
+end
+
+
 function ItemDescPanel:render()
     local history = self.props.history
     local _leftRotation = -2
@@ -106,40 +133,22 @@ function ItemDescPanel:render()
                         Padding = UDim.new(0, 20),
                     }
                 }, {
-                    Buy = Roact.createElement(TButton, {
-                        Size = UDim2.new(0, 150, 1, 0),
+                    Buy = ActionButton({
                         Text = 'Buy',
-                        TextSize = 20,
-                        TextColor3 = Color3.fromRGB(255, 255, 255),
-                        FontFace = Font.fromName('Bangers'),
-                        Background = {
-                            CornerRadius = UDim.new(0, 5),
-                            Color3 = Color3.fromRGB(0, 192, 255),
-                        },
-                        Shadow = {
-                            Color3 = Color3.fromRGB(0, 124, 166)
-                        },
+                        Color3  =Color3.fromRGB(0, 192, 255),
+                        ShadowColor3 = Color3.fromRGB(0, 124, 166),
                         Event = {
                             Activated = function() print('Bought') end,
                         },
                     }),
-                    Cancel = Roact.createElement(TButton, {
-                        Size = UDim2.new(0, 150, 1, 0),
+                    Cancel = ActionButton({
                         Text = 'Cancel',
-                        TextSize = 20,
-                        TextColor3 = Color3.fromRGB(255, 255, 255),
-                        FontFace = Font.fromName('Bangers'),
-                        Background = {
-                            CornerRadius = UDim.new(0, 5),
-                            Color3 = Color3.fromRGB(255, 0, 0),
-                        },
-                        Shadow = {
-                            Color3 = Color3.fromRGB(114, 2, 2)
-                        },
+                        Color3  =Color3.fromRGB(255, 0, 0),
+                        ShadowColor3 = Color3.fromRGB(114, 2, 2),
                         Event = {
                             Activated = function() history:goBack() end,
                         },
-                    })
+                    }),
                 })
             }),
         }),
