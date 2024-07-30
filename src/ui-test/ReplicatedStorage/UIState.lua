@@ -1,6 +1,6 @@
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
-local Store = require(ReplicatedStorage.Shared.Store)
+local Store = require(ReplicatedStorage.Modules.Store)
 local CONST = require(ReplicatedStorage.CONST)
 
 -- Player Level Progress

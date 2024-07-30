@@ -4,7 +4,7 @@
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Roact = require(ReplicatedStorage.Packages.roact)
 local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
-local TButton = require(ReplicatedStorage.Shared.Components.TButton)
+local TButton = require(ReplicatedStorage.Modules.Components.TButton)
 local ColorSquareButton = require(script.Parent.ColorSquareButton)
 
 -- Constants & Configs

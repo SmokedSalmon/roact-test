@@ -13,7 +13,7 @@ local Roact = require(ReplicatedStorage.Packages.roact)
 -- Roact.mount(app, Players.LocalPlayer.PlayerGui)
 -- print("Client finished")
 
-local Components = ReplicatedStorage.Shared.Components
+local Components = ReplicatedStorage.Modules.Components
 local AtomicComponents = Components.Atomic
 local StoreService = require(ReplicatedStorage.Store)
 local Modal = require(Components.Modal)
@@ -22,7 +22,7 @@ local GridContainer = require(AtomicComponents.GridContainer)
 local Card = require(Components.Card)
 local Button = require(Components.Button)
 local Box = require(AtomicComponents.Box)
-local UIModules = require(ReplicatedStorage.Shared.UIModules)
+local UIModules = require(ReplicatedStorage.Modules.UIModules)
 
 local GuiRoot = Roact.createElement('ScreenGui', {
     IgnoreGuiInset = true,

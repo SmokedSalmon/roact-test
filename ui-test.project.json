@@ -7,8 +7,8 @@
       "Packages": {
         "$path": "Packages"
       },
-      "Shared": {
-        "$path": "src/Shared"
+      "Modules": {
+        "$path": "src/modules/shared"
       },
       "$path": "src/ui-test/ReplicatedStorage",
       "$ignoreUnknownInstances": true

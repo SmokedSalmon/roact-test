@@ -4,9 +4,9 @@
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Roact = require(ReplicatedStorage.Packages.roact)
 local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
-local Box = require(ReplicatedStorage.Shared.Components.Atomic.Box)
-local Icon = require(ReplicatedStorage.Shared.Components.Icon)
-local WithEvents = require(ReplicatedStorage.Shared.Components.Atomic.WithEvents)
+local Box = require(ReplicatedStorage.Modules.Components.Atomic.Box)
+local Icon = require(ReplicatedStorage.Modules.Components.Icon)
+local WithEvents = require(ReplicatedStorage.Modules.Components.Atomic.WithEvents)
 
 -- Constants & Configs
 local DefaultRootContainerProps = {

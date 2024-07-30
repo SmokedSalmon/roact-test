@@ -3,7 +3,7 @@
 ]]
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Roact = require(ReplicatedStorage.Packages.roact)
-local Box = require(ReplicatedStorage.Shared.Components.Atomic.Box)
+local Box = require(ReplicatedStorage.Modules.Components.Atomic.Box)
 
 -- Constants & Configs
 

@@ -5,7 +5,7 @@
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Roact = require(ReplicatedStorage.Packages.roact)
 local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
-local Box = require(ReplicatedStorage.Shared.Components.Atomic.Box)
+local Box = require(script.Parent.Atomic.Box)
 
 -- Constants & Configs
 local DefaultUIPadding = {

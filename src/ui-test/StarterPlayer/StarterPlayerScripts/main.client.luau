@@ -14,9 +14,9 @@ local RoactRouter = require(ReplicatedStorage.Packages['roact-router'])
 -- Roact.mount(app, Players.LocalPlayer.PlayerGui)
 -- print('Client finished')
 
-local Components = ReplicatedStorage.Shared.Components
+local Components = ReplicatedStorage.Modules.Components
 local AtomicComponents = Components.Atomic
-local Store = require(ReplicatedStorage.Shared.Store)
+local Store = require(ReplicatedStorage.Modules.Store)
 local UIState = require(ReplicatedStorage.UIState)
 local Modal = require(Components.Modal)
 local WithCustomBackground = require(AtomicComponents.WithCustomBackground)
@@ -26,7 +26,7 @@ local TButton = require(Components.TButton)
 local MixedButton = require(Components.MixedButton)
 local Icon = require(Components.Icon)
 local Card = require(Components.Card)
-local GridContainer = require(ReplicatedStorage.Shared.Components.GridContainer)
+local GridContainer = require(ReplicatedStorage.Modules.Components.GridContainer)
 local TestUIComponents = require(ReplicatedStorage.TestUIComponents)
 local AnomalyComponents = require(ReplicatedStorage.AnomalyComponents.index)
 

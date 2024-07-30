@@ -1,20 +1,14 @@
 --[[
-    Grid Container, made for Items/Cards put in a grid/table
+    Row Container, Listed Rows
     Scrollable
 ]]
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local Roact = require(ReplicatedStorage.Packages.roact)
 local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
-local AtomicComponents = ReplicatedStorage.Shared.Components.Atomic
+local AtomicComponents = script.Parent.Atomic
 local Box = require(AtomicComponents.Box)
 
 -- Constants & Configs
-local DefaultLayoutProps = {
-    SortOrder = Enum.SortOrder.LayoutOrder,
-    CellPadding = UDim2.new(0, 20, 0, 20),
-    CellSize = UDim2.new(1/3, -20, 1/3, -20), -- TODO Parameterized
-    FillDirection = Enum.FillDirection.Horizontal,
-}
 local DefaultRootContainerProps = {
     Position = UDim2.new(0, 0, 0, 0),
     Size = UDim2.new(1, 0, 1, 0),
@@ -29,25 +23,24 @@ local DefaultRootContainerProps = {
         ScrollingDirection = Enum.ScrollingDirection.Y,
         VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar,
         VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
+    },
+    List = {
+        FillDirection = Enum.FillDirection.Vertical,
+        VerticalFlex = Enum.UIFlexAlignment.SpaceBetween,
     }
 }
--- local DefaultTextButtonProps = {
---     Size = UDim2.new(1, 0, 1, 0),
---     AutomaticSize = Enum.AutomaticSize.XY, -- Default fit to content
--- }
 
-local GridContainer = Roact.Component:extend('GridContainer')
+local RowContainer = Roact.Component:extend('RowContainer')
 
-function GridContainer:render()
+function RowContainer:render()
     local _props = TableUtil.Assign(DefaultRootContainerProps, self.props or {})
-    local _layoutProps = TableUtil.Assign(DefaultLayoutProps, _props.Layout)
-    _props.Layout = nil
 
     _props[Roact.Children] = TableUtil.Assign({
-        UIGridLayout = Roact.createElement('UIGridLayout', _layoutProps),
+        UIListLayout = Roact.createElement('UIListLayout', _props.List),
     }, _props[Roact.Children])
+    _props.List = nil
     
     return Roact.createElement(Box, _props)
 end
 
-return GridContainer
+return RowContainer

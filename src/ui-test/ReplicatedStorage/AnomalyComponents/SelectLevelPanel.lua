@@ -6,9 +6,9 @@ local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
 local UIState = require(ReplicatedStorage.UIState)
 
 local CONST = require(ReplicatedStorage.CONST)
-local Components = ReplicatedStorage.Shared.Components
+local Components = ReplicatedStorage.Modules.Components
 local AtomicComponents = Components.Atomic
-local StoreService = require(ReplicatedStorage.Shared.Store)
+local StoreService = require(ReplicatedStorage.Modules.Store)
 local Modal = require(Components.Modal)
 local WithCustomBackground = require(AtomicComponents.WithCustomBackground)
 local GridContainer = require(Components.GridContainer)

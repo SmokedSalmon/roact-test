@@ -3,7 +3,7 @@ local Players = game:GetService("Players")
 
 local Roact = require(ReplicatedStorage.Packages.roact)
 
-local Components = ReplicatedStorage.Shared.Components
+local Components = script.Parent.Components
 local AtomicComponents = Components.Atomic
 local StoreService = require(ReplicatedStorage.Store)
 local Modal = require(Components.Modal)

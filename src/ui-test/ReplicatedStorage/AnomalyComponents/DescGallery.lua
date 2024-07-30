@@ -4,8 +4,8 @@
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local TableUtil = require(ReplicatedStorage.Packages.TableUtil)
 local Roact = require(ReplicatedStorage.Packages.roact)
-local Box = require(ReplicatedStorage.Shared.Components.Atomic.Box)
-local ImageFrame = require(ReplicatedStorage.Shared.Components.ImageFrame)
+local Box = require(ReplicatedStorage.Modules.Components.Atomic.Box)
+local ImageFrame = require(ReplicatedStorage.Modules.Components.ImageFrame)
 
 -- Constants & Configs
 local defaultImage1Props = {
